@@ -4,5 +4,6 @@ from langganan.views import *
 app_name = 'langganan'
 
 urlpatterns = [
-    path('langganan/', langganan_page, name='langganan_page')
+    path('langganan/', langganan_page, name='langganan_page'),
+    path('langganan/beli-langganan', beli_langganan_page, name='beli_langganan_page')
 ]
