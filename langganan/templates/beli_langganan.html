@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Beli</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        select, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: whitesmoke;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HALAMAN BELI</h1>
+
+        <h2>Informasi Paket yang Ingin Dibeli:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Harga</th>
+                    <th>Resolusi Layar</th>
+                    <th>Dukungan Perangkat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Premium</td>
+                    <td>Rp 149.900</td>
+                    <td>HD</td>
+                    <td>Multi-device</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Pilih Metode Pembayaran:</h2>
+        <select>
+            <option value="transfer_bank">Transfer Bank</option>
+            <option value="kartu_kredit">Kartu Kredit</option>
+            <option value="e_wallet">E-Wallet</option>
+        </select>
+
+        <button>Bayar</button>
+    </div>
+</body>
+</html>
