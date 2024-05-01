@@ -3,9 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Daftar Kontributor</title>
+    <style>
+        /* CSS styling goes here */
+        body {
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Daftar Kontributor</h1>
+
+    <form id="filterForm">
+        <label for="contributorType">Filter Pencarian Kontributor berdasarkan tipe:</label>
+        <select id="contributorType" name="contributorType">
+            <option value="all">Semua</option>
+            <option value="sutradara">Sutradara</option>
+            <option value="pemain">Pemain</option>
+            <option value="penulis">Penulis Skenario</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Tipe</th>
+                <th>Jenis Kelamin</th>
+                <th>Kewarganegaraan</th>
+                <!-- Add more table headers as needed -->
+            </tr>
+        </thead>
+        <tbody id="contributorList">
+            <tr>
+                <td>John Doe</td>
+                <td>Sutradara</td>
+                <td>Laki-laki</td>
+                <td>USA</td>
+                <!-- Add more rows as needed -->
+            </tr>
+            <tr>
+                <td>Jane Doe</td>
+                <td>Pemain</td>
+                <td>Perempuan</td>
+                <td>UK</td>
+                <!-- Add more rows as needed -->
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
