@@ -1,1 +1,105 @@
-register
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register Page</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .register-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        width: 300px;
+        text-align: center;
+    }
+
+    .register-title {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: black;
+        text-align: left;
+    }
+
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f5f5f5;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        background-color: #ED151E;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #cc1218;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f5f5f5;
+        box-sizing: border-box;
+    }
+
+    .login-link {
+        margin-top: 20px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .login-link a {
+        color: #292c92;
+        text-decoration: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="register-container">
+    <div class="register-title">Daftar</div>
+    <form action="#">
+        <input type="text" placeholder="Username" required>
+        <input type="password" placeholder="Password" required>
+        <select name="negara" id="negara" required>
+            <option value="" disabled selected>Asal Negara</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+            <option value="Indonesia">Canada</option>
+        </select>
+        <input type="submit" value="Daftar">
+    </form>
+    <div class="login-link">Sudah punya akun? <a href="#">Masuk di sini.</a></div>
+</div>
+
+</body>
+</html>
