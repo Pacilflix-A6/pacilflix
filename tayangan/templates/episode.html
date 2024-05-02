@@ -1,39 +1,177 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 {% endblock meta %}
 
 {% block content %}
-<body>
-    <div class="container mt-5">
-        <h1>HALAMAN EPISODE</h1>
+<style>
+    /* Konten Container */
+    .container {
+        margin-top: 50px;
+    }
 
-        <!-- Judul Episode -->
-        <h2>Judul: <data></h2>
+    /* Input Pencarian */
+    .input-group {
+        width: 100%;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
 
-        <!-- Sub Judul Episode -->
-        <h3>Sub Judul: <data></h3>
+    /* Opsi Top 10 */
+    .btn-primary {
+        margin-right: 10px;
+        background-color: #ED151E;
+        border-color: #ED151E;
+    }
 
-        <!-- Tombol Aksi -->
-        <div class="mb-3">
-            <button type="button" class="btn btn-primary">Tonton</button>
+    .div-table {
+        justify-content: center;
+    }
+
+    /* Tabel Tayangan Terbaik */
+    table {
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px; /* Mengatur sudut ujung tabel */
+        overflow: hidden; /* Menghindari overflow dari border-radius */
+    }
+
+    th, td {
+        padding: 10px;
+        border: 2px solid #f2f2f2;
+        text-align: center;
+        font-family: 'Roboto';
+        max-width: 200px; /* Menentukan lebar maksimum untuk sel dalam tabel */
+        overflow: hidden;
+        text-overflow: ellipsis; /* Mengatur teks yang melebihi lebar maksimum agar dipotong dengan titik-titik */
+        white-space: nowrap; /* Mencegah teks untuk melompat ke baris baru */
+    }
+
+    th {
+        background-color: #f2f2f2;
+        vertical-align: top;
+    }
+
+    td {
+        color: #f2f2f2;
+        text-align: left;
+    }
+
+    /* Modal */
+    .modal-dialog {
+        max-width: 800px;
+    }
+
+    h1, h2, h3 {
+        color: #ED151E;
+        font-family: 'Bebas Neue', sans-serif;
+        text-align: center;
+    }
+
+    h3 {
+        color: #f2f2f2;
+        margin-top: 20px;
+    }
+
+    .episode-container {
+        display: flex;
+        flex-wrap: wrap; /* Mengizinkan item-item episode untuk melompat ke baris baru jika lebar layar tidak mencukupi */
+        margin-bottom: 20px;
+        margin-top: 20px;
+        justify-content: center;
+    }
+
+    .episode-item {
+        flex: 0 0 auto; /* Item episode tidak akan meregang dan memiliki lebar minimum */
+        margin-right: 10px; /* Jarak antara setiap item episode */
+        margin-bottom: 10px; /* Jarak antara baris episode */
+    }
+
+    .btn-episode {
+        background-color: #ED151E;
+        border-color: #ED151E;
+        color: #fff;
+        font-size: 16px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-episode:hover {
+        background-color: #ba0d14;
+        border-color: #ba0d14;
+    }
+
+</style>
+
+<div class="container mt-5">
+    <h1>HALAMAN EPISODE</h1>
+
+    <!-- Judul Series -->
+    <h2>Fallout</h2>
+    <h2>The Beginning</h2>
+
+    <!-- Kumpulan Episode -->
+    <h3>EPISODE LAINNYA</h3>
+    <div class="episode-container">
+        <div class="episode-item">
+            <button type="button" class="btn btn-episode">Episode 1</button>
         </div>
-
-        <!-- Informasi Episode -->
-        <div class="mb-3">
-            <p>Sinopsis Episode: <data></p>
-            <p>Durasi Episode: <data></p>
-            <p>URL Episode: <data></p>
-            <p>Tanggal Rilis Episode: <data></p>
+        <div class="episode-item">
+            <button type="button" class="btn btn-episode">Episode 2</button>
         </div>
-
-        <!-- Daftar Episode Lainnya -->
-        <h3>Episode Lainnya:</h3>
-        <ul>
-            <li><a href="#">Episode 1</a></li>
-            <!-- ⋮ Episode lainnya ⋮ -->
-            <li><a href="#">Episode N</a></li>
-        </ul>
+        <div class="episode-item">
+            <button type="button" class="btn btn-episode">Episode 3</button>
+        </div>
+        <div class="episode-item">
+            <button type="button" class="btn btn-episode">Episode 4</button>
+        </div>
+        <div class="episode-item">
+            <button type="button" class="btn btn-episode">Episode 5</button>
+        </div>
+        <div class="episode-item">
+            <button type="button" class="btn btn-episode">Episode 6</button>
+        </div>
+        <div class="episode-item">
+            <button type="button" class="btn btn-episode">Episode 7</button>
+        </div>
+        <div class="episode-item">
+            <button type="button" class="btn btn-episode">Episode 8</button>
+        </div>
     </div>
-</body>
+
+    <!-- Tombol-->
+    <div class="mb-3 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary me-2">Unduh Tayangan</button>
+        <button type="button" class="btn btn-primary">Jadikan Favorit</button>
+    </div>
+
+    <div class="div-table">
+        <!-- Tabel Data Series -->
+        <table class="film-table">
+            <tbody>
+                <tr>
+                    <th>Sinopsis Episode</th>
+                    <td>Perang...</td>
+                </tr>
+                <tr>
+                    <th>Durasi Episode</th>
+                    <td>62 Menit</td>
+                </tr>
+                <tr>
+                    <th>URL Episode</th>
+                    <td><button type="button" class="btn btn-primary">Lihat Episode</button></td>
+                </tr>
+                <tr>
+                    <th>Tanggal Rilis Episode</th>
+                    <td>10-11-2024</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock content %}
