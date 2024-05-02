@@ -1,0 +1,125 @@
+
+{% extends 'base.html' %} 
+
+{% block meta %}
+{% endblock meta %}
+
+{% block content %}
+<body>
+    <div class="container mt-5">
+        <h1>DAFTAR TAYANGAN</h1>
+        
+        <!-- Input Pencarian Tayangan -->
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Input Pencarian Tayangan berdasarkan judul" id="searchInput">
+            <button class="btn btn-primary" type="button" id="searchButton">Search</button>
+        </div>
+
+        <!-- Opsi Top 10 -->
+        <div class="mb-3">
+            <button type="button" class="btn btn-primary me-2">Top 10 Global</button>
+            <button type="button" class="btn btn-primary">Top 10 Negara Pengguna</button>
+        </div>
+
+        <!-- Tabel Tayangan Terbaik -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Peringkat</th>
+                    <th>Judul</th>
+                    <th>Sinopsis</th>
+                    <th>Trailer</th>
+                    <th>Tanggal Rilis</th>
+                    <th>Total View 7 Hari Terakhir</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data tayangan terbaik -->
+                <tr>
+                    <td>1</td>
+                    <td><data></td>
+                    <td><data></td>
+                    <td><data></td>
+                    <td><data></td>
+                    <td><data></td>
+                </tr>
+                <!-- ⋮ Baris lainnya ⋮ -->
+            </tbody>
+        </table>
+
+        <!-- Kategori: Film -->
+        <h2>Film</h2>
+        <!-- Tabel Film -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Judul</th>
+                    <th>Sinopsis</th>
+                    <th>Trailer</th>
+                    <th>Tanggal Rilis</th>
+                    <th>Tayangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data film -->
+                <tr>
+                    <td><data></td>
+                    <td><data></td>
+                    <td><data></td>
+                    <td><data></td>
+                    <td><button type="button" class="btn btn-primary">Halaman Tayangan</button></td>
+                </tr>
+                <!-- ⋮ Baris lainnya ⋮ -->
+            </tbody>
+        </table>
+
+        <!-- Kategori: Series -->
+        <h2>Series</h2>
+        <!-- Tabel Series -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Judul</th>
+                    <th>Sinopsis</th>
+                    <th>Trailer</th>
+                    <th>Tanggal Rilis</th>
+                    <th>Tayangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data series -->
+                <tr>
+                    <td><data></td>
+                    <td><data></td>
+                    <td><data></td>
+                    <td><data></td>
+                    <td><button type="button" class="btn btn-primary">Halaman Tayangan</button></td>
+                </tr>
+                <!-- ⋮ Baris lainnya ⋮ -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Fitur search -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">HASIL PENCARIAN</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Placeholder search -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    document.getElementById('searchButton').addEventListener('click', function () {
+        console.log("Search button clicked!");
+        $('#searchModal').modal('show');
+    });
+</script>
+{% endblock content %}

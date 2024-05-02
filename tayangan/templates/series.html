@@ -1,0 +1,92 @@
+
+{% extends 'base.html' %} 
+
+{% block meta %}
+{% endblock meta %}
+
+{% block content %}
+<body>
+    <div class="container mt-5">
+        <h1>HALAMAN SERIES</h1>
+
+        <!-- Judul Series -->
+        <h2>Judul: <data></h2>
+
+        <!-- Daftar Episode -->
+        <h3>Episode:</h3>
+        <ul>
+            <li><a href="#">Episode 1</a></li>
+            <!-- ⋮ Episode lainnya ⋮ -->
+            <li><a href="#">Episode N</a></li>
+        </ul>
+
+        <!-- Tombol Aksi -->
+        <div class="mb-3">
+            <button type="button" class="btn btn-primary">Unduh Tayangan</button>
+            <button type="button" class="btn btn-primary">Favorit Tayangan</button>
+        </div>
+
+        <!-- Data Series -->
+        <div class="mb-3">
+            <p>Total View: <data></p>
+            <p>Rating Rata-Rata: <data></p>
+            <p>Sinopsis: <data></p>
+            <p>Genre:</p>
+            <ul>
+                <li><data_genre_1></li>
+                <!-- ⋮ genre lainnya ⋮ -->
+                <li><data_genre_n></li>
+            </ul>
+            <p>Asal Negara: <data></p>
+            <p>Pemain:</p>
+            <ul>
+                <li><nama_pemain_1></li>
+                <!-- ⋮ Pemain lainnya ⋮ -->
+                <li><nama_pemain_n></li>
+            </ul>
+            <p>Penulis Skenario:</p>
+            <ul>
+                <li><nama_penulis_skenario_1></li>
+                <!-- ⋮ Penulis lainnya ⋮ -->
+                <li><nama_penulis_skenario_3></li>
+            </ul>
+            <p>Sutradara: <data></p>
+        </div>
+
+        <!-- Bagian Ulasan -->
+        <h2>BAGIAN ULASAN</h2>
+
+        <!-- Input Deskripsi Ulasan -->
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Input untuk deskripsi ulasan" id="reviewDescriptionInput">
+            <input type="number" class="form-control" placeholder="Rating (0-5)" id="reviewRatingInput" min="0" max="5" value="0">
+            <button type="button" class="btn btn-primary" id="submitReviewButton">Submit</button>
+        </div>
+
+        <!-- Daftar Ulasan -->
+        <ul id="reviewList">
+            
+        </ul>
+    </div>
+</body>
+
+<script>
+    document.getElementById('submitReviewButton').addEventListener('click', function () {
+        // Mendapatkan review, rating, dan username
+        var reviewDescription = document.getElementById('reviewDescriptionInput').value;
+        var reviewRating = document.getElementById('reviewRatingInput').value;
+        var username = "John Doe"; // Example username\
+
+        // Buat list item baru
+        var newReview = document.createElement('li');
+        newReview.textContent = username + ": " + reviewDescription + ' - Rating: ' + reviewRating;
+
+        // Tambahkan ke daftar review
+        document.getElementById('reviewList').appendChild(newReview);
+
+        // Clear input
+        document.getElementById('reviewDescriptionInput').value = '';
+        document.getElementById('reviewRatingInput').value = '0'; //default
+    });
+</script>
+{% endblock content %}

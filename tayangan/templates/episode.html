@@ -1,0 +1,39 @@
+{% extends 'base.html' %} 
+
+{% block meta %}
+{% endblock meta %}
+
+{% block content %}
+<body>
+    <div class="container mt-5">
+        <h1>HALAMAN EPISODE</h1>
+
+        <!-- Judul Episode -->
+        <h2>Judul: <data></h2>
+
+        <!-- Sub Judul Episode -->
+        <h3>Sub Judul: <data></h3>
+
+        <!-- Tombol Aksi -->
+        <div class="mb-3">
+            <button type="button" class="btn btn-primary">Tonton</button>
+        </div>
+
+        <!-- Informasi Episode -->
+        <div class="mb-3">
+            <p>Sinopsis Episode: <data></p>
+            <p>Durasi Episode: <data></p>
+            <p>URL Episode: <data></p>
+            <p>Tanggal Rilis Episode: <data></p>
+        </div>
+
+        <!-- Daftar Episode Lainnya -->
+        <h3>Episode Lainnya:</h3>
+        <ul>
+            <li><a href="#">Episode 1</a></li>
+            <!-- ⋮ Episode lainnya ⋮ -->
+            <li><a href="#">Episode N</a></li>
+        </ul>
+    </div>
+</body>
+{% endblock content %}
