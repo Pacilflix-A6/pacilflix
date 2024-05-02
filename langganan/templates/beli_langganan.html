@@ -1,37 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Beli</title>
     <style>
         body {
-            margin: 0;
-            padding: 20px;
+            background-color: #141414;
+            color: white;
+            font-family: 'Roboto', sans-serif;
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #fff;
             padding: 20px;
             border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1, h2 {
             text-align: center;
-            color: #333;
+            color: #ED151E;
+            margin-bottom: 20px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            border: 1px solid #ED151E;
         }
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #ED151E;
             padding: 10px;
             text-align: left;
+            background-color: #333;
+            color: white;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #ED151E;
+            color: white;
         }
         select, button {
             display: block;
@@ -41,16 +46,21 @@
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
-            background-color: whitesmoke;
-            color: black;
+            background-color: #ED151E;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        select:hover, button:hover {
+            background-color: #cc1218;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>HALAMAN BELI</h1>
+        <h1><b>HALAMAN BELI</b></h1>
 
-        <h2>Informasi Paket yang Ingin Dibeli:</h2>
+        <h2><b>Informasi Paket yang Ingin Dibeli:</b></h2>
         <table>
             <thead>
                 <tr>
@@ -70,7 +80,7 @@
             </tbody>
         </table>
 
-        <h2>Pilih Metode Pembayaran:</h2>
+        <h2><b>Pilih Metode Pembayaran:</b></h2>
         <select>
             <option value="transfer_bank">Transfer Bank</option>
             <option value="kartu_kredit">Kartu Kredit</option>
@@ -80,4 +90,4 @@
         <button>Bayar</button>
     </div>
 </body>
-</html>
+{% endblock content %}
