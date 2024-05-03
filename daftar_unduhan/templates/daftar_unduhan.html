@@ -1,0 +1,176 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      background-color: #141414;
+      color: white;
+      font-family: "Roboto", sans-serif;
+    }
+    h1 {
+      margin-top: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ed151e;
+      font-size: 36px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      border: 1px solid #ed151e;
+    }
+    th,
+    td {
+      border: 1px solid #ed151e;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #ed151e;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #333;
+    }
+    form {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    label {
+      margin-right: 10px;
+      color: #ed151e;
+    }
+    select {
+      padding: 10px;
+      margin-left: 10px;
+      border: 1px solid #ed151e;
+      border-radius: 4px;
+      background-color: #333;
+      color: white;
+      box-sizing: border-box;
+    }
+    .button {
+      padding: 8px 16px;
+      text-align: center;
+      display: inline-block;
+      font-size: 14px;
+      margin: 4px 2px;
+      cursor: pointer;
+      background-color: #ed151e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    .button:hover {
+      background-color: #cc1218;
+    }
+    #mainBody {
+      padding: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div id="mainBody">
+    <h1><b>Daftar Unduhan</b></h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Judul</th>
+          <th>Waktu Diunduh</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="contributorList">
+        <tr>
+          <td>Everything Everywhere All At Once</td>
+          <td>2024-05-01</td>
+          <td>
+            <button
+              class="button"
+              data-toggle="modal"
+              data-target="#confirmDeleteModal"
+            >
+              Hapus
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e</td>
+          <td>2024-04-07</td>
+          <td>
+            <button
+              class="button"
+              data-toggle="modal"
+              data-target="#confirmDeleteModal"
+            >
+              Hapus
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="modal fade"
+    id="confirmDeleteModal"
+    tabindex="-1"
+    aria-labelledby="confirmDeleteModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5
+            style="color: #cc1218"
+            class="modal-title"
+            id="confirmDeleteModalLabel"
+          >
+            SUKSES MENAMBAHKAN TAYANGAN KE DAFTAR UNDUHAN
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div style="color: #cc1218" class="modal-body">
+          Selamat! Anda telah berhasil mengunduh Everything Everywhere All At Once dan akan
+          berlaku hingga [current time + 7 hari]. Cek informasi selengkapnya
+          pada halaman daftar unduhan.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Batal
+          </button>
+          <button type="button" class="btn btn-danger">
+            Menuju Daftar Unduhan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button
+    class="button"
+    data-toggle="modal"
+    data-target="#confirmDeleteModal"
+    style="margin: 30px"
+  >
+    Unduh Tayangan
+  </button>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+{% endblock content %}
