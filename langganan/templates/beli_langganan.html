@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <style>
+        body {
+            background-color: #141414;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #ED151E;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 1px solid #ED151E;
+        }
+        th, td {
+            border: 1px solid #ED151E;
+            padding: 10px;
+            text-align: left;
+            background-color: #333;
+            color: white;
+        }
+        th {
+            background-color: #ED151E;
+            color: white;
+        }
+        select, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #ED151E;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        select:hover, button:hover {
+            background-color: #cc1218;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><b>HALAMAN BELI</b></h1>
+
+        <h2><b>Informasi Paket yang Ingin Dibeli:</b></h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Harga</th>
+                    <th>Resolusi Layar</th>
+                    <th>Dukungan Perangkat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Premium</td>
+                    <td>Rp 149.900</td>
+                    <td>HD</td>
+                    <td>Multi-device</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2><b>Pilih Metode Pembayaran:</b></h2>
+        <select>
+            <option value="transfer_bank">Transfer Bank</option>
+            <option value="kartu_kredit">Kartu Kredit</option>
+            <option value="e_wallet">E-Wallet</option>
+        </select>
+
+        <button>Bayar</button>
+    </div>
+</body>
+{% endblock content %}

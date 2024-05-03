@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <style>
+        body {
+            background-color: #141414;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+        h1 {
+            margin-top: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ED151E;
+            font-size: 36px; 
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px solid #ED151E;
+        }
+        th, td {
+            border: 1px solid #ED151E;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #ED151E;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        label {
+            margin-right: 10px;
+            color: #ED151E;
+        }
+        select {
+            padding: 10px;
+            margin-left: 10px;
+            border: 1px solid #ED151E;
+            border-radius: 4px;
+            background-color: #333;
+            color: white;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ED151E;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button[type="submit"]:hover {
+            background-color: #cc1218;
+        }
+        #mainBody {
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainBody">
+        <h1><b>Daftar Kontributor</b></h1>
+
+        <form id="filterForm">
+            <label for="contributorType">Filter Pencarian Kontributor berdasarkan tipe:</label>
+            <select id="contributorType" name="contributorType">
+                <option value="all">Semua</option>
+                <option value="sutradara">Sutradara</option>
+                <option value="pemain">Pemain</option>
+                <option value="penulis">Penulis Skenario</option>
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Tipe</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Kewarganegaraan</th>
+                </tr>
+            </thead>
+            <tbody id="contributorList">
+                <tr>
+                    <td>John Doe</td>
+                    <td>Sutradara</td>
+                    <td>Laki-laki</td>
+                    <td>USA</td>
+                </tr>
+                <tr>
+                    <td>Jane Doe</td>
+                    <td>Pemain</td>
+                    <td>Perempuan</td>
+                    <td>UK</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+{% endblock content %}
