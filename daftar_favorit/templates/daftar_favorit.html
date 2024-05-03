@@ -1,0 +1,179 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      background-color: #141414;
+      color: white;
+      font-family: "Roboto", sans-serif;
+    }
+    h1 {
+      margin-top: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ed151e;
+      font-size: 36px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      border: 1px solid #ed151e;
+    }
+    th,
+    td {
+      border: 1px solid #ed151e;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #ed151e;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #333;
+    }
+    form {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    label {
+      margin-right: 10px;
+      color: #ed151e;
+    }
+    select {
+      padding: 10px;
+      margin-left: 10px;
+      border: 1px solid #ed151e;
+      border-radius: 4px;
+      background-color: #333;
+      color: white;
+      box-sizing: border-box;
+    }
+    .button {
+      padding: 8px 16px;
+      text-align: center;
+      display: inline-block;
+      font-size: 14px;
+      margin: 4px 2px;
+      cursor: pointer;
+      background-color: #ed151e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    .button:hover {
+      background-color: #cc1218;
+    }
+    #mainBody {
+      padding: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div id="mainBody">
+    <h1><b>Daftar Favorit</b></h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Judul</th>
+          <th>Waktu Ditambahkan</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="contributorList">
+        <tr>
+          <td>Jatuh Cinta Seperti di Film-film</td>
+          <td>2024-01-01</td>
+          <td>
+            <button
+              class="button"
+              data-toggle="modal"
+              data-target="#confirmAddModel"
+            >
+              Hapus
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>The Social Network</td>
+          <td>2024-02-07</td>
+          <td>
+            <button
+              class="button"
+              data-toggle="modal"
+              data-target="#confirmAddModel"
+            >
+              Hapus
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="modal fade"
+    id="confirmAddModel"
+    tabindex="-1"
+    aria-labelledby="confirmAddModelLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5
+            style="color: #cc1218"
+            class="modal-title"
+            id="confirmAddModelLabel"
+          >
+            TAMBAH KE DAFTAR FAVORIT
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <label for="fav-list">Judul Daftar Favorit:</label>
+          <select id="fav-list">
+            <option>Jatuh Cinta Seperti di Film-Film</option>
+            <option>The Social Network</option>
+            <option>Judul 3</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Batal
+          </button>
+          <button type="button" class="btn btn-danger">Tambah</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button
+    class="button"
+    data-toggle="modal"
+    data-target="#confirmAddModel"
+    style="margin: 30px"
+  >
+    Favorit Tayangan
+  </button>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+{% endblock content %}
