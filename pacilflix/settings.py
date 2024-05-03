@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'daftar_kontributor',
-    'langganan'
+    'langganan',
+    'tayangan',
 ]
 
 MIDDLEWARE = [
