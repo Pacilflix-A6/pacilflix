@@ -1,0 +1,259 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+{% endblock meta %}
+
+{% block content %}
+<style>
+    /* Konten Container */
+    .container {
+        margin-top: 50px;
+    }
+
+    /* Input Pencarian */
+    .input-group {
+        width: 100%;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    /* Opsi Top 10 */
+    .btn-primary {
+        margin-right: 10px;
+        background-color: #ED151E;
+        border-color: #ED151E;
+    }
+
+    /* Tabel Tayangan Terbaik */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px; /* Mengatur sudut ujung tabel */
+        overflow: hidden; /* Menghindari overflow dari border-radius */
+    }
+
+    th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ED151E;
+        text-align: center;
+        font-family: 'Roboto';
+    }
+
+    th {
+        background-color: #f2f2f2;
+        vertical-align: top;
+    }
+
+    td {
+        color: #f2f2f2;
+    }
+
+    .modal-text {
+        color: #000000;
+    }
+
+    /* Modal */
+    .modal-dialog {
+        max-width: 800px;
+    }
+
+    h1, h2, h3 {
+        color: #ED151E;
+        font-family: 'Bebas Neue', sans-serif;
+        text-align: center;
+    }
+    
+    .d-flex {
+        display: flex;
+    }
+    
+    .justify-content-between {
+        justify-content: space-between;
+    }
+    
+    .align-items-center {
+        align-items: center;
+    }
+    
+    .flex-column {
+        flex-direction: column;
+    }
+
+</style>
+
+<div class="container">
+    <h1>DAFTAR TAYANGAN</h1>
+    
+    <!-- Input Pencarian Tayangan -->
+    <div class="input-group" style="display: flex;">
+        <input type="text" class="form-control" placeholder="Input Judul Film/Series" id="searchInput" style="flex-grow: 1;">
+        <button class="btn btn-primary" type="button" id="searchButton" style="width: 100px;">Search</button>
+    </div>    
+
+    <!-- Opsi Top 10 -->
+    <div class="d-flex justify-content-end mt-3">
+        <button type="button" class="btn btn-primary me-2">Top 10 Global</button>
+        <button type="button" class="btn btn-primary">Top 10 Negara Pengguna</button>
+    </div>
+
+    <!-- Spasi -->
+    <div style="margin-bottom: 20px;"></div> 
+
+    <!-- Tabel Tayangan Terbaik -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Peringkat</th>
+                <th>Judul</th>
+                <th>Sinopsis</th>
+                <th>Trailer</th>
+                <th>Tanggal Rilis</th>
+                <th>Total View 7 Hari Terakhir</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data tayangan terbaik -->
+            <tr>
+                <td>1</td>
+                <td>Interstellar</td>
+                <td>Atronot yang ditugaskan untuk menemukan planet baru yang layak huni untuk umat manusia ke depannya.</td>
+                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                <td>06-11-2014</td>
+                <td>200</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>The Matrix</td>
+                <td>Seorang hacker menemukan bahwa dunia yang ia kenal adalah simulasi. </td>
+                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                <td>2024-04-21</td>
+                <td>150</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Inception</td>
+                <td>Seorang pencuri pikiran menjelajahi mimpi orang lain.</td>
+                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                <td>2020-05-22</td>
+                <td>100</td>
+            </tr>
+            <!-- ⋮ Baris lainnya ⋮ -->
+        </tbody>
+    </table>
+
+    <!-- Kategori: Film -->
+    <h2>Film</h2>
+    <!-- Tabel Film -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Judul</th>
+                <th>Sinopsis</th>
+                <th>Trailer</th>
+                <th>Tanggal Rilis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data film -->
+            <tr>
+                <td>Inception</td>
+                <td>Seorang pencuri pikiran menjelajahi mimpi orang lain.</td>
+                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                <td>2020-05-22</td>
+            </tr>
+            <!-- ⋮ baris lainnya ⋮ -->
+            <tr>
+                <td>Interstellar</td>
+                <td>Atronot yang ditugaskan untuk menemukan planet baru yang layak huni untuk umat manusia ke depannya.</td>
+                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                <td>06-11-2014</td>
+            </tr>
+            <tr>
+                <td>The Matrix</td>
+                <td>Seorang hacker menemukan bahwa dunia yang ia kenal adalah simulasi. </td>
+                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                <td>2024-04-21</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Kategori: Series -->
+    <h2>Series</h2>
+    <!-- Tabel Series -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Judul</th>
+                <th>Sinopsis</th>
+                <th>Trailer</th>
+                <th>Tanggal Rilis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data series -->
+            <tr>
+                <td>Game of Thrones</td>
+                <td>Berbagai keluarga bangsawan berjuang untuk menguasai Tanah Seven Kingdoms.</td>
+                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                <td>2019-05-05</td>
+            </tr>
+            <!-- ⋮ Baris lainnya ⋮ -->
+            <tr>
+                <td>Breaking Bad</td>
+                <td>Seorang guru kimia yang putus asa menjadi produsen dan penjual metamfetamin.</td>
+                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                <td>2018-08-07</td>
+            </tr>
+            <tr>
+                <td>Friends</td>
+                <td>Kisah persahabatan dan kehidupan sehari-hari enam teman di New York City.</td>
+                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                <td>2015-05-06</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Fitur Search -->
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #000000; color: #ED151E;">
+                <h5 class="modal-title" id="searchModalLabel">HASIL PENCARIAN</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="film-table">
+                    <thead>
+                        <tr>
+                            <th>Judul</th>
+                            <th>Sinopsis</th>
+                            <th>URL Trailer</th>
+                            <th>Tanggal Rilis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="modal-text">Fallout</td>
+                            <td class="modal-text">Di masa depan, Los Angeles pasca-apokaliptik yang disebabkan oleh destruksi nuklir, warga harus tinggal di bunker bawah tanah untuk melindungi diri dari radiasi, mutan, dan perampok.</td>
+                            <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
+                            <td class="modal-text">10-11-2024</td>
+                        </tr>
+                        <!-- Tambahkan baris untuk hasil pencarian lainnya di sini jika ada -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('searchButton').addEventListener('click', function () {
+        console.log("Search button clicked!");
+        $('#searchModal').modal('show');
+    });
+</script>
+{% endblock content %}
