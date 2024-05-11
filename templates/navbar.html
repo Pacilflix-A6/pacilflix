@@ -1,3 +1,4 @@
+
 {% load static %}
 <head>
     <style>
@@ -57,8 +58,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
+                {% if request.COOKIES.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Trailer Tayangan</a>
+                    <a class="nav-link" href="#">Daftar Tayangan</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'daftar_kontributor:daftar_kontributor_page' %}">Daftar Kontributor</a>
@@ -73,8 +75,16 @@
                     <a class="nav-link" href="{% url 'langganan:langganan_page' %}">Kelola Langganan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link logout-btn">Logout</a>
+                    <a href="{% url 'accounts:logout' %}" class="nav-link logout-btn">Logout</a>
                 </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tayangan:trailer' %}">Daftar Trailer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'accounts:form_login' %}" class="nav-link logout-btn">Login</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>
