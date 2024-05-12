@@ -7,6 +7,14 @@
             font-size: 35px;
             color: #ED151E;
             padding: 0 10px;
+            text-decoration: none;
+        }
+
+        .navbar-logo:hover,
+        .navbar-logo:focus,
+        .navbar-logo:active {
+            color: #ED151E;
+            text-decoration: none;
         }
 
         .container-box {
@@ -52,13 +60,13 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <div class="navbar-logo">PACILFLIX - A6</div>
+        {% if request.COOKIES.is_authenticated %}
+        <a class="navbar-logo" href="{% url 'tayangan:tayangan' %}">PACILFLIX - A6</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                {% if request.COOKIES.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'tayangan:tayangan' %}">Daftar Tayangan</a>
                 </li>
@@ -77,15 +85,30 @@
                 <li class="nav-item">
                     <a href="{% url 'accounts:logout' %}" class="nav-link logout-btn">Logout</a>
                 </li>
-                {% else %}
+            </ul>
+        </div>
+        {% else %}
+        <a class="navbar-logo" href="{% url 'accounts:login' %}">PACILFLIX - A6</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'tayangan:trailer' %}">Daftar Trailer</a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'accounts:form_login' %}" class="nav-link logout-btn">Login</a>
                 </li>
-                {% endif %}
             </ul>
-        </div>
+        {% endif %}
     </div>
 </nav>
+
+
+
+
+
+
+
+
