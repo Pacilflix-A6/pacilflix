@@ -1,6 +1,6 @@
 from django.db import connection
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from accounts.sharedpref import *
 
@@ -44,3 +44,18 @@ def logout(request):
     response.delete_cookie('is_authenticated')
     LoggedInUser.username = ''
     return response
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        negara = request.POST.get('negara')
+        cursor = connection.cursor()
+        cursor.execute("""
+            INSERT INTO PENGGUNA (username, password, negara_asal)
+            VALUES (%s, %s, %s)
+        """, (username, password, negara))
+        if cursor.rowcount == 0:
+            return JsonResponse({'status': 'failed'})
+        else:
+            return JsonResponse({'status': 'success'})
