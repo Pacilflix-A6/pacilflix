@@ -162,41 +162,6 @@
       </div>
     </div>
   </div>
-
-  <button class="button" onclick="updateFavoriteAction();" style="margin: 30px">
-    Favorit Tayangan
-  </button>
-
-  <script>
-    function updateFavoriteAction() {
-      var modal = document.getElementById("confirmAddModel");
-      var judulDaftar = document.getElementById("fav-list").value;
-      updateFormAction(judulDaftar); 
-
-      new bootstrap.Modal(modal).show();
-    }
-
-    // Fungsi untuk memperbarui form action
-    function updateFormAction(judulDaftar) {
-      var judulFav = "Breaking Bad"; 
-      const baseUrl = "{% url 'daftar_favorit:add_favorit' 'FAV' 'LIST' %}"
-        .replace("FAV", encodeURIComponent(judulFav))
-        .replace("LIST", "placeholder");
-
-      var form = document.getElementById("addFavoritForm");
-      form.action = baseUrl.replace(
-        "placeholder",
-        encodeURIComponent(judulDaftar)
-      );
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      var select = document.getElementById("fav-list");
-      select.addEventListener("change", function () {
-        updateFormAction(this.value); // Memperbarui form action setiap kali dropdown berubah
-      });
-    });
-  </script>
 </body>
 
 {% endblock content %}

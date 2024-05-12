@@ -149,13 +149,6 @@
   <script>
     var judulTayangan = "{{ 'Das Leben der Anderen'|urlencode }}";
   </script>
-  <button
-    onclick="downloadShow(judulTayangan);"
-    class="button"
-    style="margin: 30px"
-  >
-    Unduh Tayangan
-  </button>
 
   <div class="modal fade" id="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -186,35 +179,7 @@
   </div>
 
   <script>
-    function downloadShow(judul1) {
-      fetch(
-        "{% url 'daftar_unduhan:add_download' 'placeholder' %}".replace(
-          "placeholder",
-          judul1
-        ),
-        {
-          method: "POST",
-          headers: {
-            "X-CSRFToken": "{{ csrf_token }}",
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "success") {
-            var current_time_plus_seven = new Date();
-            current_time_plus_seven.setDate(
-              current_time_plus_seven.getDate() + 7
-            );
-
-            document.querySelector(
-              ".modal-body"
-            ).innerHTML = `Selamat! Anda telah berhasil mengunduh ${decodeURIComponent(judul1)} dan akan berlaku hingga ${current_time_plus_seven.toLocaleString()}. Cek informasi selengkapnya pada halaman daftar unduhan.`;
-            $("#confirmDownloadModal").modal("show");
-          }
-        });
-    }
-
+    
     function deleteDownload(judul) {
       fetch(
         "{% url 'daftar_unduhan:delete_download' 'placeholder' %}".replace(
