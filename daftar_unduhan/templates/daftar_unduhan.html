@@ -88,41 +88,29 @@
         </tr>
       </thead>
       <tbody id="contributorList">
+        {% for download in downloads %}
         <tr>
-          <td>Everything Everywhere All At Once</td>
-          <td>2024-05-01</td>
+          <td>{{ download.0 }}</td>
+          <td>{{ download.1 }}</td>
           <td>
             <button
+              onclick="deleteDownload('{{ download.0|urlencode }}');"
               class="button"
-              data-toggle="modal"
-              data-target="#confirmDeleteModal"
             >
               Hapus
             </button>
           </td>
         </tr>
-        <tr>
-          <td>Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e</td>
-          <td>2024-04-07</td>
-          <td>
-            <button
-              class="button"
-              data-toggle="modal"
-              data-target="#confirmDeleteModal"
-            >
-              Hapus
-            </button>
-          </td>
-        </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>
 
   <div
     class="modal fade"
-    id="confirmDeleteModal"
+    id="confirmDownloadModal"
     tabindex="-1"
-    aria-labelledby="confirmDeleteModalLabel"
+    aria-labelledby="confirmDownloadModalLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog">
@@ -131,7 +119,7 @@
           <h5
             style="color: #cc1218"
             class="modal-title"
-            id="confirmDeleteModalLabel"
+            id="confirmDownloadModalLabel"
           >
             SUKSES MENAMBAHKAN TAYANGAN KE DAFTAR UNDUHAN
           </h5>
@@ -145,29 +133,117 @@
           </button>
         </div>
         <div style="color: #cc1218" class="modal-body">
-          Selamat! Anda telah berhasil mengunduh Everything Everywhere All At Once dan akan
-          berlaku hingga [current time + 7 hari]. Cek informasi selengkapnya
-          pada halaman daftar unduhan.
+          Selamat! Anda telah berhasil mengunduh Everything Everywhere All At
+          Once dan akan berlaku hingga [current time + 7 hari]. Cek informasi
+          selengkapnya pada halaman daftar unduhan.
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Batal
+            Close
           </button>
-          <button type="button" class="btn btn-danger">
-            Menuju Daftar Unduhan
+          <a type="button" class="btn btn-danger" href="{% url 'daftar_unduhan:daftar_unduhan_page' %}"> Menuju Daftar Unduhan </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var judulTayangan = "{{ 'Das Leben der Anderen'|urlencode }}";
+  </script>
+  <button
+    onclick="downloadShow(judulTayangan);"
+    class="button"
+    style="margin: 30px"
+  >
+    Unduh Tayangan
+  </button>
+
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" style="color: red">
+            GAGAL MENGHAPUS TAYANGAN DARI DAFTAR UNDUHAN
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-message" style="color: red"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Tutup
           </button>
         </div>
       </div>
     </div>
   </div>
-  <button
-    class="button"
-    data-toggle="modal"
-    data-target="#confirmDeleteModal"
-    style="margin: 30px"
-  >
-    Unduh Tayangan
-  </button>
+
+  <script>
+    function downloadShow(judul1) {
+      fetch(
+        "{% url 'daftar_unduhan:add_download' 'placeholder' %}".replace(
+          "placeholder",
+          judul1
+        ),
+        {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            var current_time_plus_seven = new Date();
+            current_time_plus_seven.setDate(
+              current_time_plus_seven.getDate() + 7
+            );
+
+            document.querySelector(
+              ".modal-body"
+            ).innerHTML = `Selamat! Anda telah berhasil mengunduh ${decodeURIComponent(judul1)} dan akan berlaku hingga ${current_time_plus_seven.toLocaleString()}. Cek informasi selengkapnya pada halaman daftar unduhan.`;
+            $("#confirmDownloadModal").modal("show");
+          }
+        });
+    }
+
+    function deleteDownload(judul) {
+      fetch(
+        "{% url 'daftar_unduhan:delete_download' 'placeholder' %}".replace(
+          "placeholder",
+          judul
+        ),
+        {
+          method: "DELETE",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "failed") {
+            showModal('Tayangan minimal harus berada di daftar unduhan selama 1 hari agar bisa dihapus.');
+          } else if (data.status === "success") {
+            window.location.href = data.redirect_url;
+          }
+        });
+    }
+
+    function showModal(message) {
+      const modal = document.getElementById("modal");
+      document.getElementById("modal-message").textContent = message;
+      $("#modal").modal("show");
+    }
+  </script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

@@ -77,34 +77,26 @@
 </head>
 <body>
   <div id="mainBody">
-    <h1><b>Daftar Favorit</b></h1>
+    <h1><b>{{judul_daftar_fav}}</b></h1>
 
     <table>
       <thead>
         <tr>
           <th>Judul</th>
-          <th>Waktu Ditambahkan</th>
           <th>Aksi</th>
         </tr>
       </thead>
       <tbody id="contributorList">
-        {% for favorite in favorites %}
+        {% for movie in movies %}
         <tr>
+          <td>{{movie.0}}</td>
           <td>
             <a
-              href="{% url 'daftar_favorit:detail_daftar_favorit_page' favorite.1 favorite.0 %}"
-            >
-              {{ favorite.0 }}
-            </a>
-          </td>
-          <td>{{ favorite.1 }}</td>
-          <td>
-            <a
-              href="{% url 'daftar_favorit:delete_daftar_favorit' favorite.1 %}"
+                href="{% url 'daftar_favorit:delete_favorit' movie.0 %}"
               class="button"
             >
               Hapus
-            </a>
+          </a>
           </td>
         </tr>
         {% endfor %}
@@ -138,65 +130,36 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form id="addFavoritForm" method="post">
-          {% csrf_token %}
-          <div class="modal-body">
-            <label for="fav-list">Judul Daftar Favorit:</label>
-            <select name="judul_daftar" id="fav-list" class="form-control">
-              {% for favorite in favorites %}
-              <option value="{{ favorite.0 }}">{{ favorite.0 }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Batal
-            </button>
-            <button type="submit" class="btn btn-danger">Tambah</button>
-          </div>
-        </form>
+
+        <div class="modal-body">
+          <label for="fav-list">Judul Daftar Favorit:</label>
+          <select id="fav-list">
+            <option>Jatuh Cinta Seperti di Film-Film</option>
+            <option>The Social Network</option>
+            <option>Judul 3</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Batal
+          </button>
+          <button type="button" class="btn btn-danger">Tambah</button>
+        </div>
       </div>
     </div>
   </div>
-
-  <button class="button" onclick="updateFavoriteAction();" style="margin: 30px">
+  <button
+    class="button"
+    data-toggle="modal"
+    data-target="#confirmAddModel"
+    style="margin: 30px"
+  >
     Favorit Tayangan
   </button>
 
-  <script>
-    function updateFavoriteAction() {
-      var modal = document.getElementById("confirmAddModel");
-      var judulDaftar = document.getElementById("fav-list").value;
-      updateFormAction(judulDaftar); 
-
-      new bootstrap.Modal(modal).show();
-    }
-
-    // Fungsi untuk memperbarui form action
-    function updateFormAction(judulDaftar) {
-      var judulFav = "Breaking Bad"; 
-      const baseUrl = "{% url 'daftar_favorit:add_favorit' 'FAV' 'LIST' %}"
-        .replace("FAV", encodeURIComponent(judulFav))
-        .replace("LIST", "placeholder");
-
-      var form = document.getElementById("addFavoritForm");
-      form.action = baseUrl.replace(
-        "placeholder",
-        encodeURIComponent(judulDaftar)
-      );
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      var select = document.getElementById("fav-list");
-      select.addEventListener("change", function () {
-        updateFormAction(this.value); // Memperbarui form action setiap kali dropdown berubah
-      });
-    });
-  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 {% endblock content %}

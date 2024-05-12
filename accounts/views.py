@@ -2,6 +2,7 @@ from django.db import connection
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from accounts.sharedpref import *
 
 def option(request):
     return render(request, "login.html")
@@ -29,7 +30,7 @@ def login(request):
             response.set_cookie('username', username)
             response.set_cookie('negara', negara)
             response.set_cookie('is_authenticated', "True")
-            
+            LoggedInUser.username = username
             return response
         else:
             context = {"is_error": True}
@@ -41,4 +42,5 @@ def logout(request):
     response.delete_cookie('username')
     response.delete_cookie('negara')
     response.delete_cookie('is_authenticated')
+    LoggedInUser.username = ''
     return response
