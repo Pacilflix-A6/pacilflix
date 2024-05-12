@@ -80,22 +80,32 @@
         text-decoration: none;
     }
 
+    .error-message {
+    color: white;
+    padding: 10px;
+    margin-top: 10px;
+}
+
 </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="login-container">
-        <div class="login-title">Masuk</div>
-        <form method="POST" action="{% url 'accounts:log_in' %}">
-            {% csrf_token %}
-            <input type="text" placeholder="Username" id="username" name="username" required>
-            <input type="password" placeholder="Password"id="password" name="password" required>
-            <button type="submit" class="custom-btn">Login</button>
-        </form>
-        <div class="register-link">Belum punya akun? <a href="{% url 'accounts:form_register' %}">Daftar di sini.</a></div>
+    <div class="container">
+        <div class="login-container">
+            <div class="login-title">Masuk</div>
+            <form method="POST" action="{% url 'accounts:log_in' %}">
+                {% csrf_token %}
+                <input type="text" placeholder="Username" id="username" name="username" required>
+                <input type="password" placeholder="Password" id="password" name="password" required>
+                <button type="submit" class="custom-btn">Login</button>
+            </form>
+            <div class="register-link">Belum punya akun? <a href="{% url 'accounts:form_register' %}">Daftar di sini.</a></div>
+            {% if error %}
+                <p class="error-message">{{ error }}</p>
+            {% endif %}
+        </div>
     </div>
-</div>
+    
 
 </body>
 {% endblock content %}

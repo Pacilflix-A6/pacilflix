@@ -9,7 +9,7 @@ FROM pengguna
 WHERE username = NEW.username
 ) INTO username_exists;
 IF username_exists THEN
-RETURN NULL;
+RAISE EXCEPTION 'Username % already exists', NEW.username;
 END IF;
 RETURN NEW;
 END;

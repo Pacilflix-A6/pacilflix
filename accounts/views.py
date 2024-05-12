@@ -33,9 +33,9 @@ def login(request):
             LoggedInUser.username = username
             return response
         else:
-            context = {"is_error": True}
+            context["error"] = "Username atau password salah! Silakan coba lagi."
 
-    return render(request, 'login.html', context)
+    return render(request, 'form_login.html', context)
 
 def logout(request):
     response = HttpResponseRedirect(reverse('accounts:login'))
@@ -51,11 +51,11 @@ def register(request):
         password = request.POST.get('password')
         negara = request.POST.get('negara')
         cursor = connection.cursor()
-        cursor.execute("""
-            INSERT INTO PENGGUNA (username, password, negara_asal)
-            VALUES (%s, %s, %s)
-        """, (username, password, negara))
-        if cursor.rowcount == 0:
-            return JsonResponse({'status': 'failed'})
-        else:
+        try:
+            cursor.execute("""
+                INSERT INTO PENGGUNA (username, password, negara_asal)
+                VALUES (%s, %s, %s)
+            """, (username, password, negara))
             return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'failed'})
