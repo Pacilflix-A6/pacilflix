@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db import connection
 
 # Create your views here.
 def tayangan(request):
@@ -8,10 +9,38 @@ def trailer(request):
     return render(request, "trailer.html")
 
 def film(request):
-    return render(request, "film.html")
+
+    # ini buat dropdown daftar favorit di modal favorit
+    cursorb = connection.cursor()
+    cursorb.execute(f"""
+        SELECT judul, timestamp
+        FROM DAFTAR_FAVORIT
+        WHERE username = 'john_doe';
+        """
+    )
+
+    context = {
+        # bisa tambahin disini aja buat output query lu
+        'favorites': cursorb.fetchall()
+    }
+    return render(request, "film.html", context)
 
 def series(request):
-    return render(request, "series.html")
+
+    # ini buat dropdown daftar favorit di modal favorit
+    cursorb = connection.cursor()
+    cursorb.execute(f"""
+        SELECT judul, timestamp
+        FROM DAFTAR_FAVORIT
+        WHERE username = 'john_doe';
+        """
+    )
+
+    context = {
+        # bisa tambahin disini aja buat output query lu
+        'favorites': cursorb.fetchall()
+    }
+    return render(request, "series.html", context)
 
 def episode(request):
     return render(request, "episode.html")

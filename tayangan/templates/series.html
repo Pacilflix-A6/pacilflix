@@ -247,9 +247,13 @@
 </div>
 
     <!-- Tombol-->
+    <!-- bagian 'Das Leben... tolong ganti judul film yg udh connect ke db yaa'-->
+    <script>
+        var judulTayangan = "{{ 'Das Leben der Anderen'|urlencode }}"; 
+    </script>
     <div class="mb-3 d-flex justify-content-center">
-        <button type="button" class="btn btn-primary me-2">Unduh Tayangan</button>
-        <button type="button" class="btn btn-primary">Jadikan Favorit</button>
+        <button type="button" class="btn btn-primary me-2" onclick="downloadShow(judulTayangan);">Unduh Tayangan</button>
+            <button type="button" class="btn btn-primary me-2" onclick="updateFavoriteAction();">Jadikan Favorit</button>
     </div>
 
     <!-- Tabel Data Series -->
@@ -380,23 +384,178 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('submitReviewButton').addEventListener('click', function () {
-        // Mendapatkan review, rating, dan username
-        var reviewDescription = document.getElementById('reviewDescriptionInput').value;
-        var reviewRating = document.getElementById('reviewRatingInput').value;
-        var username = "John Doe"; // Example username\
+<!-- ini modal buat download-->
+<div
+    class="modal fade"
+    id="confirmDownloadModal"
+    tabindex="-1"
+    aria-labelledby="confirmDownloadModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5
+            style="color: #cc1218"
+            class="modal-title"
+            id="confirmDownloadModalLabel"
+          >
+            SUKSES MENAMBAHKAN TAYANGAN KE DAFTAR UNDUHAN
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div style="color: #cc1218" class="modal-body">
+          Selamat! Anda telah berhasil mengunduh Everything Everywhere All At
+          Once dan akan berlaku hingga [current time + 7 hari]. Cek informasi
+          selengkapnya pada halaman daftar unduhan.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <a type="button" class="btn btn-danger" href="{% url 'daftar_unduhan:daftar_unduhan_page' %}"> Menuju Daftar Unduhan </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        // Buat list item baru untuk review
-        var newReview = document.createElement('li');
-        newReview.textContent = username + ": " + reviewDescription + ' - Rating: ' + reviewRating;
+  <!-- ini modal buat favorit-->
+  <div
+        class="modal fade"
+        id="confirmAddModel"
+        tabindex="-1"
+        aria-labelledby="confirmAddModelLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5
+                style="color: #cc1218"
+                class="modal-title"
+                id="confirmAddModelLabel"
+              >
+                TAMBAH KE DAFTAR FAVORIT
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="addFavoritForm" method="post">
+              {% csrf_token %}
+              <div class="modal-body">
+                <label for="fav-list">Judul Daftar Favorit:</label>
+                <select name="judul_daftar" id="fav-list" class="form-control">
+                  {% for favorite in favorites %}
+                  <option value="{{ favorite.0 }}">{{ favorite.0 }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Batal
+                </button>
+                <button type="submit" class="btn btn-danger">Tambah</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
 
-        // Tambah review ke daftar review
-        document.getElementById('reviewList').appendChild(newReview);
+  <script>
+    // Izin commentin script lu ya bimo, gaada id submitReviewButton jadi function lain error
 
-        // Clear input
-        document.getElementById('reviewDescriptionInput').value = '';
-        document.getElementById('reviewRatingInput').value = '0'; //default
+    // document.getElementById('submitReviewButton').addEventListener('click', function () {
+    //     // Mendapatkan review, rating, dan username
+    //     var reviewDescription = document.getElementById('reviewDescriptionInput').value;
+    //     var reviewRating = document.getElementById('reviewRatingInput').value;
+    //     var username = "John Doe"; // Example username\
+
+    //     // Buat list item baru untuk review
+    //     var newReview = document.createElement('li');
+    //     newReview.textContent = username + ": " + reviewDescription + ' - Rating: ' + reviewRating;
+
+    //     // Tambah review ke daftar review
+    //     document.getElementById('reviewList').appendChild(newReview);
+
+    //     // Clear input
+    //     document.getElementById('reviewDescriptionInput').value = '';
+    //     document.getElementById('reviewRatingInput').value = '0'; //default
+    // });
+
+    
+    function updateFavoriteAction() {
+      var modal = document.getElementById("confirmAddModel");
+      var judulDaftar = document.getElementById("fav-list").value;
+      updateFormAction(judulDaftar); 
+
+      new bootstrap.Modal(modal).show();
+    }
+
+    // Fungsi untuk memperbarui form action
+    function updateFormAction(judulDaftar) {
+      var judulFav = "Breaking Bad"; 
+      const baseUrl = "{% url 'daftar_favorit:add_favorit' 'FAV' 'LIST' %}"
+        .replace("FAV", encodeURIComponent(judulFav))
+        .replace("LIST", "placeholder");
+
+      var form = document.getElementById("addFavoritForm");
+      form.action = baseUrl.replace(
+        "placeholder",
+        encodeURIComponent(judulDaftar)
+      );
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var select = document.getElementById("fav-list");
+      select.addEventListener("change", function () {
+        updateFormAction(this.value); 
+      });
     });
+    
+    function downloadShow(judul1) {
+      fetch(
+        "{% url 'daftar_unduhan:add_download' 'placeholder' %}".replace(
+          "placeholder",
+          judul1
+        ),
+        {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            var current_time_plus_seven = new Date();
+            current_time_plus_seven.setDate(
+              current_time_plus_seven.getDate() + 7
+            );
+
+            document.querySelector(
+              ".modal-body"
+            ).innerHTML = `Selamat! Anda telah berhasil mengunduh ${decodeURIComponent(judul1)} dan akan berlaku hingga ${current_time_plus_seven.toLocaleString()}. Cek informasi selengkapnya pada halaman daftar unduhan.`;
+            $("#confirmDownloadModal").modal("show");
+          }
+        });
+    };
 </script>
 {% endblock content %}
