@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from accounts.sharedpref import *
+from django.views.decorators.csrf import csrf_exempt
 
 def option(request):
     return render(request, "login.html")
@@ -13,6 +14,7 @@ def form_login(request):
 def form_register(request):
     return render(request, "form_register.html")
 
+@csrf_exempt
 def login(request):
     context = {"error": ""}
     if request.method == "POST":
@@ -45,6 +47,7 @@ def logout(request):
     LoggedInUser.username = ''
     return response
 
+@csrf_exempt
 def register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -58,4 +61,5 @@ def register(request):
             """, (username, password, negara))
             return JsonResponse({'status': 'success'})
         except Exception as e:
+            print(e)
             return JsonResponse({'status': 'failed'})
