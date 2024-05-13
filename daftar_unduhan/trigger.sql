@@ -1,5 +1,6 @@
 CREATE FUNCTION delete_download_trigger_func() RETURNS TRIGGER AS $$
 BEGIN
+    SET TIME ZONE 'Asia/Jakarta';
     IF (CURRENT_TIMESTAMP - OLD.timestamp) > INTERVAL '1 day' THEN
         RETURN OLD; 
     ELSE
