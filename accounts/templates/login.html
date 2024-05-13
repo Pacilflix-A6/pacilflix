@@ -1,65 +1,79 @@
-from django.db import connection
-from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from accounts.sharedpref import *
-from django.views.decorators.csrf import csrf_exempt
+{% extends 'base.html' %}
+{% load static %}
 
-def option(request):
-    return render(request, "login.html")
+{% block content %}
+  <style>
+      .container {
+          display: grid;
+          place-items: center;
+          height: 80vh;
+      }
 
-def form_login(request):
-    return render(request, "form_login.html")
+      .streaming-logo {
+          font-family: "Bebas Neue", sans-serif;
+          font-size: 50px;
+          margin-bottom: 20px;
+          color: #ED151E;
+      }
 
-def form_register(request):
-    return render(request, "form_register.html")
+      .container-box {
+          max-width: 500px;
+          width: 100%;
+          padding: 40px;
+          border-radius: 20px;
+          background-color: #141414;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          place-items: center;
+          display: grid;
+      }
 
-@csrf_exempt
-def login(request):
-    context = {"error": ""}
-    if request.method == "POST":
-        nama = request.POST.get("username")
-        password = request.POST.get("password")
-        with connection.cursor() as cursor:
-            cursor.execute(f"SELECT username, negara_asal FROM pengguna WHERE username='{nama}' AND password='{password}';")
-            result = cursor.fetchall()
-        
-        if len(result) != 0:
-            username = result[0][0]
-            negara = result[0][1]
-            response = HttpResponseRedirect(reverse("tayangan:tayangan"))
-            
-            response.set_cookie('username', username)
-            response.set_cookie('negara', negara)
-            response.set_cookie('is_authenticated', "True")
-            LoggedInUser.username = username
-            return response
-        else:
-            context["error"] = "Username atau password salah! Silakan coba lagi."
+      .custom-btn,
+      .register-btn {
+          width: 100%;
+          max-width: 150px;
+          padding: 10px;
+          border-radius: 10px;
+          text-align: center;
+          text-decoration: none;
+          font-family: 'Roboto', sans-serif;
+          font-weight: 700;
+          color: white;
+      }
 
-    return render(request, 'form_login.html', context)
+      .custom-btn {
+          background-color: #ED151E;
+          border: 1px solid #ED151E;
+          margin-bottom: 15px;
+      }
 
-def logout(request):
-    response = HttpResponseRedirect(reverse('accounts:login'))
-    response.delete_cookie('username')
-    response.delete_cookie('negara')
-    response.delete_cookie('is_authenticated')
-    LoggedInUser.username = ''
-    return response
+      .register-btn {
+          background-color: #141414;
+          border: 1px solid #ED151E;
+      }
 
-@csrf_exempt
-def register(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        negara = request.POST.get('negara')
-        cursor = connection.cursor()
-        try:
-            cursor.execute("""
-                INSERT INTO PENGGUNA (username, password, negara_asal)
-                VALUES (%s, %s, %s)
-            """, (username, password, negara))
-            return JsonResponse({'status': 'success'})
-        except Exception as e:
-            print(e)
-            return JsonResponse({'status': 'failed'})
+      .custom-btn:hover {
+          background-color: #cc1218;
+          border-color: #cc1218;
+          color: white;
+          text-decoration: none;
+      }
+
+      .register-btn:hover {
+          background-color: #141414;
+          border-color: #ED151E;
+          color: white;
+          text-decoration: none;
+      }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-box">
+            <div class="streaming-logo">PACILFLIX - A6</div>
+            <a href="{% url 'accounts:form_login' %}" class="custom-btn">Masuk</a>
+            <a href="{% url 'accounts:form_register' %}" class="register-btn">Daftar</a>
+        </div>
+    </div>
+
+</body>
+{% endblock content %}
