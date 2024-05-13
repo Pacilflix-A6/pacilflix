@@ -1,13 +1,14 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
 <style>
     .container {
-          display: grid;
-          place-items: center;
-          height: 80vh;
-      }
+        display: grid;
+        place-items: center;
+        height: 80vh;
+    }
 
     .register-container {
         background-color: #141414;
@@ -55,6 +56,21 @@
         background-color: #cc1218;
     }
 
+    button[type="submit"]:hover {
+        background-color: #cc1218;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        background-color: #ED151E;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
     select {
         width: 100%;
         padding: 10px;
@@ -83,19 +99,46 @@
 <div class="container">
     <div class="register-container">
         <div class="register-title">Daftar</div>
-            <form action="#">
-                <input type="text" placeholder="Username" required>
-                <input type="password" placeholder="Password" required>
-                <select name="negara" id="negara" required>
-                    <option value="" disabled selected>Asal Negara</option>
-                    <option value="USA">USA</option>
-                    <option value="UK">UK</option>
-                    <option value="Indonesia">Canada</option>
-                </select>
-                <input type="submit" value="Daftar">
-            </form>
+        <form id="register-form" method="POST" action="{% url 'accounts:register' %}">
+            {% csrf_token %}
+            <input type="text" placeholder="Username" id="username" name="username" required>
+            <input type="password" placeholder="Password" id="password" name="password" required>
+            <select name="negara" id="negara" required>
+                <option value="" disabled selected>Asal Negara</option>
+                <option value="USA">USA</option>
+                <option value="UK">UK</option>
+                <option value="Indonesia">Indonesia</option>
+                <option value="Canada">Canada</option>
+                <option value="Australia">Australia</option>
+            </select>
+            <button type="submit" class="custom-btn">Daftar</button>
+        </form>
         <div class="login-link">Sudah punya akun? <a href="{% url 'accounts:form_login' %}">Masuk di sini.</a></div>
     </div>
 </div>
+
+<script>
+    document.getElementById('register-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        fetch("{% url 'accounts:register' %}", {
+            method: "POST",
+            body: new FormData(this),
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert("Pendaftaran akun berhasil! Silakan masuk");
+                window.location.href = "{% url 'accounts:form_login' %}";
+            } else {
+                alert("Username sudah terdaftar. Silakan pilih username lain");
+            }
+        });
+    });
+</script>
+
 </body>
 {% endblock content %}
