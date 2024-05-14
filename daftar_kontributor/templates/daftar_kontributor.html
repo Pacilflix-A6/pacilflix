@@ -72,13 +72,14 @@
     <div id="mainBody">
     <h1><b>Daftar Kontributor</b></h1>
 
-    <form id="filterForm">
+    <form id="filterForm" action="{% url 'daftar_kontributor:daftar_kontributor_page' %}" method="post">
+        {% csrf_token %}
         <label for="contributorType">Filter Pencarian Kontributor berdasarkan tipe:</label>
         <select id="contributorType" name="contributorType">
-            <option value="all">Semua</option>
-            <option value="sutradara">Sutradara</option>
-            <option value="pemain">Pemain</option>
-            <option value="penulis skenario">Penulis Skenario</option>
+            <option value="all" {% if selected_type == 'all' %} selected {% endif %}>Semua</option>
+            <option value="Sutradara" {% if selected_type == 'Sutradara' %} selected {% endif %}>Sutradara</option>
+            <option value="Pemain" {% if selected_type == 'Pemain' %} selected {% endif %}>Pemain</option>
+            <option value="Penulis Skenario" {% if selected_type == 'Penulis Skenario' %} selected {% endif %}>Penulis Skenario</option>
         </select>
         <button type="submit">Filter</button>
     </form>
