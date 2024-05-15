@@ -33,7 +33,25 @@ def tayangan(request):
     return render(request, "tayangan.html", {"films": films, "series": series})
 
 def trailer(request):
-    return render(request, "trailer.html")
+    cursorb = connection.cursor()
+
+    # Query untuk mengambil data film
+    cursorb.execute(f"""
+        SELECT t.judul, t.sinopsis_trailer, t.url_video_trailer, t.release_date_trailer
+        FROM FILM AS f
+        JOIN TAYANGAN AS t ON f.id_tayangan = t.id;
+        """)
+    films = dictfetchall(cursorb)
+    
+    # Query untuk mengambil data series
+    cursorb.execute("""
+        SELECT t.judul, t.sinopsis_trailer, t.url_video_trailer, t.release_date_trailer
+        FROM SERIES AS s
+        JOIN TAYANGAN AS t ON s.id_tayangan = t.id;
+    """)
+    series = dictfetchall(cursorb)
+
+    return render(request, "trailer.html", {"films": films, "series": series})
 
 def film(request):
 
