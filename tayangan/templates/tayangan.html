@@ -163,28 +163,15 @@
         </thead>
         <tbody>
             <!-- Data film -->
+            {% for film in films %}
             <tr>
-                <td>Inception</td>
-                <td>Seorang pencuri pikiran menjelajahi mimpi orang lain.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2020-05-22</td>
+                <td>{{ film.judul }}</td>
+                <td>{{ film.sinopsis }}</td>
+                <td>{{ film.url_video_trailer }}</td>
+                <td>{{ film.release_date_film }}</td>
                 <td><button type="button" class="btn btn-primary">Lihat Film</button></td>
             </tr>
-            <!-- ⋮ baris lainnya ⋮ -->
-            <tr>
-                <td>Interstellar</td>
-                <td>Atronot yang ditugaskan untuk menemukan planet baru yang layak huni untuk umat manusia ke depannya.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>06-11-2014</td>
-                <td><button type="button" class="btn btn-primary">Lihat Film</button></td>
-            </tr>
-            <tr>
-                <td>The Matrix</td>
-                <td>Seorang hacker menemukan bahwa dunia yang ia kenal adalah simulasi. </td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2024-04-21</td>
-                <td><button type="button" class="btn btn-primary">Lihat Film</button></td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
@@ -203,28 +190,15 @@
         </thead>
         <tbody>
             <!-- Data series -->
+            {% for show in series %}
             <tr>
-                <td>Game of Thrones</td>
-                <td>Berbagai keluarga bangsawan berjuang untuk menguasai Tanah Seven Kingdoms.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2019-05-05</td>
+                <td>{{ show.judul }}</td>
+                <td>{{ show.sinopsis }}</td>
+                <td>{{ show.url_video_trailer }}</td>
+                <td>{{ show.release_date_trailer }}</td>
                 <td><button type="button" class="btn btn-primary">Lihat Series</button></td>
             </tr>
-            <!-- ⋮ Baris lainnya ⋮ -->
-            <tr>
-                <td>Breaking Bad</td>
-                <td>Seorang guru kimia yang putus asa menjadi produsen dan penjual metamfetamin.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2018-08-07</td>
-                <td><button type="button" class="btn btn-primary">Lihat Series</button></td>
-            </tr>
-            <tr>
-                <td>Friends</td>
-                <td>Kisah persahabatan dan kehidupan sehari-hari enam teman di New York City.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2015-05-06</td>
-                <td><button type="button" class="btn btn-primary">Lihat Series</button></td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

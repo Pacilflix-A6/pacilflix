@@ -2,8 +2,35 @@ from django.shortcuts import render
 from django.db import connection
 
 # Create your views here.
+
+def dictfetchall(cursor):
+    "Returns all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+
 def tayangan(request):
-    return render(request, "tayangan.html")
+    cursorb = connection.cursor()
+
+    # Query untuk mengambil data film
+    cursorb.execute(f"""
+        SELECT t.judul, t.sinopsis, t.url_video_trailer, f.release_date_film
+        FROM FILM AS f
+        JOIN TAYANGAN AS t ON f.id_tayangan = t.id;
+        """)
+    films = dictfetchall(cursorb)
+    
+    # Query untuk mengambil data series
+    cursorb.execute("""
+        SELECT t.judul, t.sinopsis, t.url_video_trailer, t.release_date_trailer
+        FROM SERIES AS s
+        JOIN TAYANGAN AS t ON s.id_tayangan = t.id;
+    """)
+    series = dictfetchall(cursorb)
+
+    return render(request, "tayangan.html", {"films": films, "series": series})
 
 def trailer(request):
     return render(request, "trailer.html")
