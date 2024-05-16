@@ -1,5 +1,7 @@
 from django.db import connection
-from django.shortcuts import render
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect, render
+from datetime import datetime, timedelta
 from accounts.sharedpref import *
 
 # Create your views here.
@@ -17,6 +19,7 @@ def get_all_paket():
         FROM PAKET p
         LEFT JOIN DUKUNGAN_PERANGKAT dp ON p.nama = dp.nama_paket
         GROUP BY p.nama, p.harga, p.resolusi_layar
+        ORDER BY p.harga DESC
         """
     )
     paket_langganan = cursor.fetchall()
@@ -30,6 +33,7 @@ def get_riwayat_transaksi():
         FROM TRANSACTION t
         INNER JOIN PAKET p ON t.nama_paket = p.nama
         WHERE t.username = %s
+        ORDER BY t.start_date_time DESC
         """,
         [LoggedInUser.username]
     )
@@ -54,4 +58,36 @@ def get_langganan_aktif():
     return langganan_aktif
 
 def beli_langganan_page(request):
-    return render(request, 'beli_langganan.html')
+    if request.method == 'POST':
+        nama = request.POST.get('nama')
+        harga = request.POST.get('harga')
+        resolusi = request.POST.get('resolusi')
+        dukungan = request.POST.get('dukungan')
+
+        return render(request, 'beli_langganan.html', {'nama': nama, 'harga': harga, 'resolusi': resolusi, 'dukungan': dukungan})
+    else:
+        return HttpResponseBadRequest("Bad request")
+    
+def proses_transaksi(request):
+    if request.method == 'POST':
+        username = LoggedInUser.username
+        nama_paket = request.POST.get('nama')
+        metode_pembayaran = request.POST.get('metode_pembayaran')
+
+        start_date_time = datetime.now()
+        end_date_time = start_date_time + timedelta(days=30)
+
+        cursor = connection.cursor()
+        cursor.execute(
+            """
+            INSERT INTO TRANSACTION (username, start_date_time, end_date_time, nama_paket, metode_pembayaran, timestamp_pembayaran)
+            VALUES (%s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
+            """,
+            [username, start_date_time, end_date_time, nama_paket, metode_pembayaran]
+        )
+
+        return redirect('langganan:langganan_page')
+    else:
+        return HttpResponseBadRequest("Bad request")
+    
+    
