@@ -175,6 +175,31 @@
         font-size: 14px;
     }
 
+    /* Gaya untuk slider dan teks progres */
+    .slider-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 20px;
+        color: #f2f2f2;
+    }
+
+    .slider-wrapper {
+        width: 100%;
+        max-width: 600px;
+    }
+
+    #progress-slider {
+        width: 100%;
+        margin-right: 10px;
+    }
+
+    #progress-value {
+        min-width: 50px;
+        text-align: left;
+    }
+
 </style>
 <body>
 
@@ -182,70 +207,77 @@
         <h1>HALAMAN FILM</h1>
     
         <!-- Judul Film -->
-        <h2>Interstellar<data></h2>
+        <h2>{{ film.judul_tayangan }}</h2>
     
         <!-- Tombol-->
         <!-- bagian 'Das Leben... tolong ganti judul film yg udh connect ke db yaa'-->
         <script>
-            var judulTayangan = "{{ 'Das Leben der Anderen'|urlencode }}"; 
+            var judulTayangan = "{{ film.judul_tayangan |urlencode }}"; 
         </script>
         <div class="mb-3 d-flex justify-content-center">
-            <button type="button" class="btn btn-primary me-2">Tonton</button>
+            <button type="button" class="btn btn-primary me-2" onclick="watchShow('{{ film.id_tayangan }}', document.getElementById('progress-slider').value);">Tonton</button>
             <button type="button" class="btn btn-primary me-2" onclick="downloadShow(judulTayangan);">Unduh Tayangan</button>
             <button type="button" class="btn btn-primary me-2" onclick="updateFavoriteAction();">Jadikan Favorit</button>
         </div>
-    
+        
+        <!-- Progress slider -->
+        <div class="slider-container">
+          <div class="slider-wrapper">
+              <label for="progress-slider">Progres Menonton:</label>
+              <input type="range" id="progress-slider" name="progress-slider" min="0" max="{{ film.durasi_film }}" value="0" oninput="updateSliderValue(this.value, '{{ film.durasi_film }}')">
+              <span id="progress-value">0%</span>
+          </div>
+        </div>
     
         <!-- Tabel Data Film -->
         <table class="film-table">
             <tbody>
                 <tr>
                     <th>Total View</th>
-                    <td>200</td>
+                    <td>{{ film.total_view }}</td>
                 </tr>
                 <tr>
                     <th>Rating</th>
-                    <td>8.7</td>
+                    <td>{{ film.rating_rata_rata }}</td>
                 </tr>
                 <tr>
                     <th>Sinopsis</th>
-                    <td>Astronot yang ditugaskan untuk menemukan planet baru yang layak huni untuk umat manusia ke depannya.</td>
+                    <td>{{ film.sinopsis_tayangan }}</td>
                 </tr>
                 <tr>
                     <th>Durasi Film</th>
-                    <td>124 Menit</td>
+                    <td>{{ film.durasi_film }} Menit</td>
                 </tr>
                 <tr>
                     <th>Tanggal Rilis Film</th>
-                    <td>06-11-2014</td>
+                    <td>{{ film.release_date_film }}</td>
                 </tr>
                 <tr>
                     <th>URL Film</th>
-                    <td><button type="button" class="btn btn-primary me-2">Tonton</button></td>
+                    <td>{{ film.url_video_film }}</td>
                 </tr>
                 <tr>
                     <th>Genre</th>
                     <td>
+                      
                         <div class="genre-buttons">
-                            <button type="button" class="btn btn-secondary" disabled>Sains Ilmiah</button>
-                            <!-- ⋮ Genre lainnya ⋮ -->
-                            <button type="button" class="btn btn-secondary" disabled>Aksi</button>
+                          {% for genre in film.genre %}
+                            <button type="button" class="btn btn-secondary" disabled>{{ genre }}</button>
+                          {% endfor %}
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <th>Asal Negara</th>
-                    <td>Amerika Serikat</td>
+                    <td>{{ film.asal_negara }}</td>
                 </tr>
                 <tr>
                     <th>Pemain</th>
                     <td>
                         <ul>
-                            <li>Matthew McConaughey</li>
-                            <!-- ⋮ Cast lainnya ⋮ -->
-                            <li>Anne Hathaway</li>
-                            <li>Jessica Chastain</li>
-                            <li>Michael Caine</li>
+                          {% for actor in film.pemain %}
+                            <li> {{ actor }} </li>
+                          {% endfor %}
                         </ul>
                     </td>
                 </tr>
@@ -253,14 +285,15 @@
                     <th>Penulis Skenario</th>
                     <td>
                         <ul>
-                            <li>Jonathan Nolan</li>
-                            <li>Christopher Nolan</li>
+                          {% for writer in film.penulis_skenario %}
+                            <li> {{ writer }} </li>
+                          {% endfor %}
                         </ul>
                     </td>
                 </tr>
                 <tr>
                     <th>Sutradara</th>
-                    <td>The GOAT Christopher Nolan</td>
+                    <td>{{ film.sutradara }}</td>
                 </tr>
             </tbody>
         </table>
@@ -270,19 +303,18 @@
     
         <!-- Input Ulasan -->
         <div class="review-container">
-            <!-- <input type="text" class="form-control" placeholder="Input untuk deskripsi ulasan" id="reviewDescriptionInput"> -->
             <div class="star-widget">
                 <input type="radio" id="rate-5" name="rate" value="5"><label for="star5" class="fas fa-star"></label>
                 <input type="radio" id="rate-4" name="rate" value="4"><label for="star4" class="fas fa-star"></label>
                 <input type="radio" id="rate-3" name="rate" value="3"><label for="star3" class="fas fa-star"></label>
                 <input type="radio" id="rate-2" name="rate" value="2"><label for="star2" class="fas fa-star"></label>
                 <input type="radio" id="rate-1" name="rate" value="1"><label for="star1" class="fas fa-star"></label>
-                <form action="#">
+                <form action="reviewForm">
                     <div class="textarea">
-                        <textarea cols="30" placeholder="Ceritakan pendapatmu di sini.."></textarea>
+                        <textarea id="reviewDescription" cols="30" placeholder="Ceritakan pendapatmu di sini.."></textarea>
                     </div>
                     <div class="btn">
-                        <button type="submit">Submit</button>
+                      <button type="submit" onclick="addReview()">Submit</button>
                     </div>
                 </form>
             </div>
@@ -334,7 +366,6 @@
             </div>
         </div>
     </div>
-    
     
     <!-- ini modal buat download-->
     <div
@@ -450,7 +481,77 @@
         //     document.getElementById('reviewDescriptionInput').value = '';
         //     document.getElementById('reviewRatingInput').value = '0'; //default
         // });
+        
+        function updateSliderValue(value, duration) {
+          var progressValue = document.getElementById("progress-value");
+          var percentage = (value / duration) * 100;
+          // console.log("Menit Film:", value);
+          progressValue.textContent = percentage.toFixed(2) + "%";
+        }
 
+        function watchShow(idTayangan, durasiTonton) {
+          console.log(idTayangan)
+          const url = "{% url 'tayangan:tonton' film.id_tayangan %}";
+          fetch(url, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRFToken": "{{ csrf_token }}",
+              },
+              body: JSON.stringify({
+                  id_tayangan: idTayangan,
+                  durasi_tonton: durasiTonton
+              })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.status === "success") {
+                  console.log("Tonton berhasil disimpan ke riwayat.");
+                  location.reload();
+              } else {
+                  console.error("Gagal menyimpan tonton ke riwayat.");
+              }
+          })
+          .catch(error => {
+              console.error("Error:", error);
+          });
+        }
+
+        function addReview() {
+          const url = "{% url 'tayangan:ulas' film.id_tayangan %}";
+
+          // Mendapatkan nilai rating
+          var rating = document.querySelector('input[name="rate"]:checked').value;
+
+          // Mendapatkan deskripsi ulasan
+          var description = document.getElementById('reviewDescription').value;
+
+          // Mengirim data ulasan ke server
+          fetch('/add-review/', {
+              method: 'POST',
+              headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRFToken": "{{ csrf_token }}",
+              },
+              body: JSON.stringify({
+                  rating: rating,
+                  description: description
+              })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Ulasan berhasil dikirim.');
+                    location.reload();
+                } else {
+                    alert('Gagal mengirim ulasan.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengirim ulasan.');
+            });
+        }
         
         function updateFavoriteAction() {
           var modal = document.getElementById("confirmAddModel");
