@@ -72,22 +72,28 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Premium</td>
-                    <td>Rp 149.900</td>
-                    <td>HD</td>
-                    <td>Multi-device</td>
+                    <td>{{ nama }}</td>
+                    <td>Rp {{ harga }}</td>
+                    <td>{{ resolusi }}</td>
+                    <td>{{ dukungan }}</td>
                 </tr>
             </tbody>
         </table>
 
         <h2><b>Pilih Metode Pembayaran:</b></h2>
-        <select>
-            <option value="transfer_bank">Transfer Bank</option>
-            <option value="kartu_kredit">Kartu Kredit</option>
-            <option value="e_wallet">E-Wallet</option>
-        </select>
-
-        <button>Bayar</button>
+        <form method="post" action="{% url 'langganan:proses_transaksi' %}">
+            {% csrf_token %}
+            <input type="hidden" name="nama" value="{{ nama }}">
+            <input type="hidden" name="harga" value="{{ harga }}">
+            <input type="hidden" name="resolusi" value="{{ resolusi }}">
+            <input type="hidden" name="dukungan" value="{{ dukungan }}">
+            <select name="metode_pembayaran">
+                <option value="Transfer Bank">Transfer Bank</option>
+                <option value="Kartu Kredit">Kartu Kredit</option>
+                <option value="E-Wallet">E-Wallet</option>
+            </select>
+            <button type="submit">Bayar</button>
+        </form>
     </div>
 </body>
 {% endblock content %}

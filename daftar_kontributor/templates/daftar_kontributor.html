@@ -70,43 +70,46 @@
 </head>
 <body>
     <div id="mainBody">
-        <h1><b>Daftar Kontributor</b></h1>
+    <h1><b>Daftar Kontributor</b></h1>
 
-        <form id="filterForm">
-            <label for="contributorType">Filter Pencarian Kontributor berdasarkan tipe:</label>
-            <select id="contributorType" name="contributorType">
-                <option value="all">Semua</option>
-                <option value="sutradara">Sutradara</option>
-                <option value="pemain">Pemain</option>
-                <option value="penulis">Penulis Skenario</option>
-            </select>
-            <button type="submit">Filter</button>
-        </form>
+    <form id="filterForm" action="{% url 'daftar_kontributor:daftar_kontributor_page' %}" method="post">
+        {% csrf_token %}
+        <label for="contributorType">Filter Pencarian Kontributor berdasarkan tipe:</label>
+        <select id="contributorType" name="contributorType">
+            <option value="all" {% if selected_type == 'all' %} selected {% endif %}>Semua</option>
+            <option value="Sutradara" {% if selected_type == 'Sutradara' %} selected {% endif %}>Sutradara</option>
+            <option value="Pemain" {% if selected_type == 'Pemain' %} selected {% endif %}>Pemain</option>
+            <option value="Penulis Skenario" {% if selected_type == 'Penulis Skenario' %} selected {% endif %}>Penulis Skenario</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Tipe</th>
-                    <th>Jenis Kelamin</th>
-                    <th>Kewarganegaraan</th>
-                </tr>
-            </thead>
-            <tbody id="contributorList">
-                <tr>
-                    <td>John Doe</td>
-                    <td>Sutradara</td>
-                    <td>Laki-laki</td>
-                    <td>USA</td>
-                </tr>
-                <tr>
-                    <td>Jane Doe</td>
-                    <td>Pemain</td>
-                    <td>Perempuan</td>
-                    <td>UK</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Tipe</th>
+                <th>Jenis Kelamin</th>
+                <th>Kewarganegaraan</th>
+            </tr>
+        </thead>
+        <tbody id="contributorList">
+            {% for contributor in contributors %}
+            <tr>
+                <td>{{ contributor.1 }}</td>
+                <td>{{ contributor.4 }}</td>
+                <td>
+                    {% if contributor.2 == 0 %}
+                        <span style="display: inline;">Laki-laki</span>
+                    {% else %}
+                        <span style="display: inline;">Perempuan</span>
+                    {% endif %}
+                </td>
+                <td>{{ contributor.3 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 </body>
 {% endblock content %}

@@ -68,14 +68,27 @@
                 </tr>
             </thead>
             <tbody id="activeSubscriptions">
-                <tr>
-                    <td>Premium</td>
-                    <td>Rp 149.900</td>
-                    <td>HD</td>
-                    <td>Multi-device</td>
-                    <td>2024-05-01</td>
-                    <td>2024-05-31</td>
-                </tr>
+                {% if not langganan_aktif %}
+                    <tr>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                {% else %}
+                    {% for langganan in langganan_aktif %}
+                        <tr>
+                            <td>{{langganan.0}}</td>
+                            <td>Rp {{langganan.1}}</td>
+                            <td>{{langganan.2}}</td>
+                            <td>{{langganan.3}}</td>
+                            <td>{{langganan.4}}</td>
+                            <td>{{langganan.5}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
             </tbody>
         </table>
     
@@ -90,21 +103,25 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody id="otherPackages">
-                <tr>
-                    <td>Standard</td>
-                    <td>Rp 99.900</td>
-                    <td>SD</td>
-                    <td>Single device</td>
-                    <td><button class="button">Beli</button></td>
-                </tr>
-                <tr>
-                    <td>Basic</td>
-                    <td>Rp 49.900</td>
-                    <td>SD</td>
-                    <td>Single device</td>
-                    <td><button class="button">Beli</button></td>
-                </tr>
+            <tbody id="packages">
+                {% for paket in paket_langganan %}
+                    <tr>
+                        <td>{{ paket.0 }}</td>
+                        <td>Rp {{ paket.1 }}</td>
+                        <td>{{ paket.2 }}</td>
+                        <td>{{ paket.3 }}</td>
+                        <td>
+                            <form action="{% url 'langganan:beli_langganan_page' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="nama" value="{{ paket.0 }}">
+                                <input type="hidden" name="harga" value="{{ paket.1 }}">
+                                <input type="hidden" name="resolusi" value="{{ paket.2 }}">
+                                <input type="hidden" name="dukungan" value="{{ paket.3 }}">
+                                <button type="submit" class="button">Beli</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     
@@ -121,22 +138,27 @@
                 </tr>
             </thead>
             <tbody id="transactionHistory">
-                <tr>
-                    <td>Premium</td>
-                    <td>2024-04-01</td>
-                    <td>2024-04-30</td>
-                    <td>Kartu Kredit</td>
-                    <td>2024-04-01</td>
-                    <td>Rp 149.900</td>
-                </tr>
-                <tr>
-                    <td>Standard</td>
-                    <td>2024-03-01</td>
-                    <td>2024-03-31</td>
-                    <td>Transfer Bank</td>
-                    <td>2024-03-01</td>
-                    <td>Rp 99.900</td>
-                </tr>
+                {% if not langganan_aktif %}
+                    <tr>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                {% else %}
+                    {% for transaksi in riwayat_transaksi %}
+                        <tr>
+                            <td>{{transaksi.0}}</td>
+                            <td>{{transaksi.1}}</td>
+                            <td>{{transaksi.2}}</td>
+                            <td>{{transaksi.3}}</td>
+                            <td>{{transaksi.4}}</td>
+                            <td>Rp {{transaksi.5}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
             </tbody>
         </table>
     </div>
