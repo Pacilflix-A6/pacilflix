@@ -169,7 +169,7 @@
                 <td>{{ film.sinopsis }}</td>
                 <td>{{ film.url_video_trailer }}</td>
                 <td>{{ film.release_date_film }}</td>
-                <td><button type="button" class="btn btn-primary">Lihat Film</button></td>
+                <td><a href="{% url 'tayangan:film_select' film.id %}" class="btn btn-primary">Lihat Film</a></td>
             </tr>
             {% endfor %}
         </tbody>
