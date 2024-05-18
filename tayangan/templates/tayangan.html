@@ -196,7 +196,7 @@
                 <td>{{ show.sinopsis }}</td>
                 <td>{{ show.url_video_trailer }}</td>
                 <td>{{ show.release_date_trailer }}</td>
-                <td><button type="button" class="btn btn-primary">Lihat Series</button></td>
+                <td><a href="{% url 'tayangan:series_select' show.id %}" class="btn btn-primary">Lihat Series</a></td>
             </tr>
             {% endfor %}
         </tbody>
