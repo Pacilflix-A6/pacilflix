@@ -85,14 +85,14 @@
         float: right;
         transition: all 0.2s ease;
     }
-    
-    input:not(:checked) ~ label:hover,
-    input:not(:checked) ~ label:hover ~ label {
+
+    .star-widget input:not(:checked) ~ label:hover,
+    .star-widget input:not(:checked) ~ label:hover ~ label {
         color: #fd4;
     }
 
-    input:checked ~ label {
-        color: #fd4;
+    .star-widget input:checked ~ label {
+      color: #fd4;
     }
 
     form .textarea {
@@ -160,7 +160,7 @@
     }
 
     .review-rating {
-        color: #ffd700; /* Warna bintang */
+        color: black; /* Warna bintang */
     }
 
     .review-content {
@@ -304,17 +304,22 @@
         <!-- Input Ulasan -->
         <div class="review-container">
             <div class="star-widget">
-                <input type="radio" id="rate-5" name="rate" value="5"><label for="star5" class="fas fa-star"></label>
-                <input type="radio" id="rate-4" name="rate" value="4"><label for="star4" class="fas fa-star"></label>
-                <input type="radio" id="rate-3" name="rate" value="3"><label for="star3" class="fas fa-star"></label>
-                <input type="radio" id="rate-2" name="rate" value="2"><label for="star2" class="fas fa-star"></label>
-                <input type="radio" id="rate-1" name="rate" value="1"><label for="star1" class="fas fa-star"></label>
-                <form action="reviewForm">
+                <input type="radio" id="rate-5" name="rate" value="5">
+                <label for="rate-5" class="fas fa-star"></label>
+                <input type="radio" id="rate-4" name="rate" value="4">
+                <label for="rate-4" class="fas fa-star"></label>
+                <input type="radio" id="rate-3" name="rate" value="3">
+                <label for="rate-3" class="fas fa-star"></label>
+                <input type="radio" id="rate-2" name="rate" value="2">
+                <label for="rate-3" class="fas fa-star"></label>
+                <input type="radio" id="rate-1" name="rate" value="1">
+                <label for="rate-1" class="fas fa-star"></label>
+                <form action="ulas">
                     <div class="textarea">
                         <textarea id="reviewDescription" cols="30" placeholder="Ceritakan pendapatmu di sini.."></textarea>
                     </div>
                     <div class="btn">
-                      <button type="submit" onclick="addReview()">Submit</button>
+                      <button type="button" onclick="addReview()">Submit</button>
                     </div>
                 </form>
             </div>
@@ -324,47 +329,28 @@
         <h2>DAFTAR ULASAN</h2>
         <div class="review-list">
             <div class="review-item">
+              {% for ulasan in film.kumpulan_ulasan %}
                 <div class="review-box">
                     <div class="review-header">
-                        <div class="review-rating">
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star"></span>
+                        <div class="review-rating" onload="showRating('{{ ulasan.rating }}')">
+                          <!-- <script>
+                            // Panggil fungsi showRating() dengan rating yang sesuai
+                            showRating(`{{ ulasan.rating }}`);
+                          </script> -->
+                          <span class="fas fa-star checked"></span>
+                          {{ ulasan.rating }}
                         </div>
                     </div>
                     <div class="review-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet aliquam nisi id pulvinar.</p>
+                        <p>{{ ulasan.deskripsi }}</p>
                     </div>
                     <div class="review-footer">
-                        <span class="review-author">Hilmy Gondrong</span>
-                        <span class="review-date">Apr 29, 2024</span>
+                        <span class="review-author">{{ ulasan.username }}</span>
+                        <span class="review-date">{{ ulasan.timestamp }}</span>
                     </div>
                 </div>
+              {% endfor %}
             </div>
-            <!-- Ulasan lainnya ditambahkan di sini -->
-            <div class="review-item">
-                <div class="review-box">
-                    <div class="review-header">
-                        <div class="review-rating">
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star"></span>
-                        </div>
-                    </div>
-                    <div class="review-content">
-                        <p>Wah keren filmnya, btw lu kenapa My?</p>
-                    </div>
-                    <div class="review-footer">
-                        <span class="review-author">Bmo</span>
-                        <span class="review-date">May 2, 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     
     <!-- ini modal buat download-->
@@ -460,28 +446,58 @@
           </div>
         </div>
       </div>
+
+      <!-- Error Modal -->
+      <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel" style="color: #cc1218">Gagal Mengirim Ulasan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="errorModalBody">
+                    <!-- Error message will be injected here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- Info Modal -->
+      <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel" style="color: #000">Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="infoModalBody">
+                    <!-- Info message will be injected here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+      </div>
       
     <script>
-        // Izin commentin script lu ya bimo, gaada id submitReviewButton jadi function lain error
+        document.addEventListener("DOMContentLoaded", function () {
+        // Ambil referensi modal
+        var infoModal = document.getElementById("infoModal");
 
-        // document.getElementById('submitReviewButton').addEventListener('click', function () {
-        //     // Mendapatkan review, rating, dan username
-        //     var reviewDescription = document.getElementById('reviewDescriptionInput').value;
-        //     var reviewRating = document.getElementById('reviewRatingInput').value;
-        //     var username = "John Doe"; // Example username\
-    
-        //     // Buat list item baru untuk review
-        //     var newReview = document.createElement('li');
-        //     newReview.textContent = username + ": " + reviewDescription + ' - Rating: ' + reviewRating;
-    
-        //     // Tambah review ke daftar review
-        //     document.getElementById('reviewList').appendChild(newReview);
-    
-        //     // Clear input
-        //     document.getElementById('reviewDescriptionInput').value = '';
-        //     document.getElementById('reviewRatingInput').value = '0'; //default
-        // });
-        
+        setTimeout(function () {
+            // Tutup modal
+            $('#infoModal').modal('hide');
+        }, 3000); // Ubah angka 3000 menjadi jumlah milidetik yang diinginkan
+      });
+
         function updateSliderValue(value, duration) {
           var progressValue = document.getElementById("progress-value");
           var percentage = (value / duration) * 100;
@@ -490,7 +506,7 @@
         }
 
         function watchShow(idTayangan, durasiTonton) {
-          console.log(idTayangan)
+          // console.log(idTayangan)
           const url = "{% url 'tayangan:tonton' film.id_tayangan %}";
           fetch(url, {
               method: "POST",
@@ -522,12 +538,14 @@
 
           // Mendapatkan nilai rating
           var rating = document.querySelector('input[name="rate"]:checked').value;
+          console.log(rating);
 
           // Mendapatkan deskripsi ulasan
-          var description = document.getElementById('reviewDescription').value;
+          var deskripsi = document.getElementById('reviewDescription').value;
+          console.log(deskripsi)
 
           // Mengirim data ulasan ke server
-          fetch('/add-review/', {
+          fetch(url, {
               method: 'POST',
               headers: {
                   "Content-Type": "application/json",
@@ -535,21 +553,29 @@
               },
               body: JSON.stringify({
                   rating: rating,
-                  description: description
+                  deskripsi: deskripsi
               })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert('Ulasan berhasil dikirim.');
+                  document.getElementById('infoModalBody').textContent = data.message;
+                  $('#infoModal').modal('show');
+                  setTimeout(function() {
                     location.reload();
+                  }, 2000);
+                
                 } else {
-                    alert('Gagal mengirim ulasan.');
+                     // Inject error message into modal
+                    document.getElementById('errorModalBody').textContent = data.error;
+                    // Show the modal
+                    $('#errorModal').modal('show');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Terjadi kesalahan saat mengirim ulasan.');
+                document.getElementById('errorModalBody').textContent = data.error;
+                $('#errorModal').modal('show');
             });
         }
         

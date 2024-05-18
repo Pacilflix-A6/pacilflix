@@ -3,7 +3,7 @@ import json
 
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.db import connection
+from django.db import IntegrityError, InternalError, connection
 
 from accounts.sharedpref import LoggedInUser
 
@@ -62,12 +62,12 @@ def trailer(request):
 def film_select(request, film_id):
     cursorb = connection.cursor()
     cursorb.execute(f"""
-        SELECT 
+        SELECT
             f.id_tayangan,
-            t.judul AS judul_tayangan, 
+            t.judul AS judul_tayangan,
             t.sinopsis AS sinopsis_tayangan,
             t.asal_negara,
-            f.url_video_film, 
+            f.url_video_film,
             f.release_date_film,
             f.durasi_film,
             ROUND(AVG(u.rating), 1) AS rating_rata_rata,
@@ -75,7 +75,26 @@ def film_select(request, film_id):
             ARRAY_AGG(DISTINCT cpm.nama) AS pemain,
             ARRAY_AGG(DISTINCT psc.nama) AS penulis_skenario,
             cs.nama AS sutradara,
-            tv.total_view
+            tv.total_view,
+            (
+                SELECT 
+                    json_agg(json_build_object(
+                        'username', username,
+                        'timestamp', TO_CHAR(timestamp, 'YYYY-MM-DD (HH24:MI:SS)'),
+                        'rating', rating,
+                        'deskripsi', deskripsi
+                    ) ORDER BY timestamp DESC) 
+                FROM (
+                    SELECT DISTINCT 
+                        username, 
+                        timestamp, 
+                        rating, 
+                        deskripsi 
+                    FROM ULASAN 
+                    WHERE id_tayangan = t.id
+                ) AS distinct_ulasan
+            ) AS kumpulan_ulasan
+
         FROM TAYANGAN AS t
         JOIN FILM AS f ON t.id = f.id_tayangan
         LEFT JOIN ULASAN AS u ON t.id = u.id_tayangan
@@ -91,11 +110,11 @@ def film_select(request, film_id):
         LEFT JOIN FILM_VIEWERS AS tv ON t.id = tv.id_tayangan
 
         WHERE t.id = '{film_id}'
-        GROUP BY f.id_tayangan, t.judul, t.sinopsis, t.asal_negara, f.url_video_film, f.release_date_film, f.durasi_film, cs.nama, psc.nama, tv.total_view;
+        GROUP BY t.id, f.id_tayangan, t.judul, t.sinopsis, t.asal_negara, f.url_video_film, f.release_date_film, f.durasi_film, cs.nama, psc.nama, tv.total_view;
         """)
     film = dictfetchall(cursorb)[0]
 
-    # print(film)
+    print(film)
     
     return render(request, 'film.html', {'film': film})
 
@@ -110,7 +129,7 @@ def tonton(request, film_id):
         json_data = json.loads(request.body)
         
         # Mendapatkan nilai id_tayangan dan durasi_tonton dari data JSON
-        id_tayangan = json_data.get("id_tayangan")
+        id_tayangan = film_id
         durasi_tonton = json_data.get("durasi_tonton")
         username = LoggedInUser.username
         start_date_time = datetime.now()
@@ -130,28 +149,29 @@ def ulas(request, film_id):
     cursor = connection.cursor()
 
     if request.method == "POST":
-        # id_tayangan = request.body[0]
-        # print(request.body)
-        # print(id_tayangan)
-        # Mendapatkan data JSON dari request body
-        json_data = json.loads(request.body)
-        
-        # Mendapatkan nilai id_tayangan dan durasi_tonton dari data JSON
-        id_tayangan = film_id
-        username = LoggedInUser.username
-        timestamp = datetime.now()
-        rating = json_data.get("rating")
-        deskripsi = json_data.get("deskripsi")
+        try:
+            # Mendapatkan data JSON dari request body
+            json_data = json.loads(request.body)
+            
+            # Mendapatkan nilai id_tayangan dan durasi_tonton dari data JSON
+            id_tayangan = film_id
+            username = LoggedInUser.username
+            timestamp = datetime.now()
+            rating = json_data.get("rating")
+            deskripsi = json_data.get("deskripsi")
 
-        cursor.execute(f"""
-            NSERT INTO ULASAN (id_tayangan, username, timestamp, rating, deskripsi)
-            VALUES (%s, %s, %s, %s, %s);
-            """, (id_tayangan, username, timestamp, rating, deskripsi))
+            cursor.execute(f"""
+                INSERT INTO ULASAN (id_tayangan, username, timestamp, rating, deskripsi)
+                VALUES (%s, %s, %s, %s, %s);
+                """, (id_tayangan, username, timestamp, rating, deskripsi))
+            
+            return JsonResponse({"status": "success", "message": "Ulasan berhasil dikirim"})
         
+        except InternalError as e:
+            # Menangkap pesan error dari PostgreSQL
+            return JsonResponse({"status": "failed", "error": "Kamu sudah pernah mengulas tayangan ini."})
 
-        return JsonResponse({"status": "success"})
-    
-    return JsonResponse({"status": "failed"})
+    return JsonResponse({"status": "failed", "error": "Terjadi kesalahan saat mengirim ulasan."})
 
 def film(request):
 
