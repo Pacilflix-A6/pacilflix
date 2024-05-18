@@ -21,7 +21,7 @@ def tayangan(request):
     cursorb = connection.cursor()
 
     # Query untuk mengambil data film
-    cursorb.execute(f"""
+    cursorb.execute("""
         SELECT t.judul, t.sinopsis, t.url_video_trailer, f.release_date_film, t.id
         FROM FILM AS f
         JOIN TAYANGAN AS t ON f.id_tayangan = t.id;
@@ -36,7 +36,35 @@ def tayangan(request):
     """)
     series = dictfetchall(cursorb)
 
-    return render(request, "tayangan.html", {"films": films, "series": series})
+    # Query untuk mengambil data tayangan terbaik
+    cursorb.execute("""
+            WITH RankedTayangan AS (
+                SELECT 
+                    T.id,
+                    T.judul,
+                    T.sinopsis_trailer,
+                    T.url_video_trailer,
+                    T.release_date_trailer,
+                    COALESCE(FV.total_view, SV.total_view) AS total_view,
+                    CASE
+                    WHEN FV.id_tayangan IS NOT NULL THEN 'Film'
+                    WHEN SV.id_tayangan IS NOT NULL THEN 'Series'
+                    ELSE 'Unknown'
+                    END AS tipe_tayangan,
+                    ROW_NUMBER() OVER (ORDER BY COALESCE(FV.total_view, SV.total_view) DESC) AS peringkat
+                FROM TAYANGAN T
+                LEFT JOIN FILM_VIEWERS_LAST_7_DAYS FV ON T.id = FV.id_tayangan
+                LEFT JOIN SERIES_VIEWERS_LAST_7_DAYS SV ON T.id = SV.id_tayangan
+                )
+                SELECT id, judul, sinopsis_trailer, url_video_trailer, release_date_trailer, total_view, tipe_tayangan, peringkat
+                FROM RankedTayangan
+                WHERE peringkat <= 10
+                ORDER BY peringkat;
+                    """)
+    
+    best_shows = dictfetchall(cursorb)
+
+    return render(request, "tayangan.html", {"films": films, "series": series, "best_shows":best_shows})
 
 def trailer(request):
     cursorb = connection.cursor()
@@ -113,8 +141,6 @@ def film_select(request, film_id):
         GROUP BY t.id, f.id_tayangan, t.judul, t.sinopsis, t.asal_negara, f.url_video_film, f.release_date_film, f.durasi_film, cs.nama, psc.nama, tv.total_view;
         """)
     film = dictfetchall(cursorb)[0]
-
-    # print(film)
     
     return render(request, 'film.html', {'film': film})
 
@@ -180,8 +206,6 @@ def series_select(request, series_id):
         """)
     
     series = dictfetchall(cursorb)[0]
-
-    print(series)
     
     return render(request, 'series.html', {'series': series})
 
@@ -221,8 +245,6 @@ def episode_select(request, series_id, sub_judul):
         """)
     
     episode = dictfetchall(cursorb)[0]
-
-    print(episode)
     
     return render(request, 'episode.html', {'episode': episode})
 

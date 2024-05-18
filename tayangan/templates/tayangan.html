@@ -64,6 +64,7 @@
         color: #ED151E;
         font-family: 'Bebas Neue', sans-serif;
         text-align: center;
+        padding-top: 20px;
     }
     
     .d-flex {
@@ -93,11 +94,7 @@
         <button class="btn btn-primary" type="button" id="searchButton" style="width: 100px;">Search</button>
     </div>    
 
-    <!-- Opsi Top 10 -->
-    <div class="d-flex justify-content-end mt-3">
-        <button type="button" class="btn btn-primary me-2">Top 10 Global</button>
-        <button type="button" class="btn btn-primary">Top 10 Negara Pengguna</button>
-    </div>
+    <h2>Top 10 Global Tayangan</h2>
 
     <!-- Spasi -->
     <div style="margin-bottom: 20px;"></div> 
@@ -117,34 +114,21 @@
         </thead>
         <tbody>
             <!-- Data tayangan terbaik -->
+            {% for show in best_shows %}
             <tr>
-                <td>1</td>
-                <td>Interstellar</td>
-                <td>Atronot yang ditugaskan untuk menemukan planet baru yang layak huni untuk umat manusia ke depannya.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>06-11-2014</td>
-                <td>200</td>
-                <td><button type="button" class="btn btn-primary">Lihat Tayangan</button></td>
+                <td>{{ show.peringkat }}</td>
+                <td>{{ show.judul }}</td>
+                <td>{{ show.sinopsis_trailer }}</td>
+                <td>{{ show.url_video_trailer }}</td>
+                <td>{{ show.release_date_trailer }}</td>
+                <td>{{ show.total_view }}</td>
+                {% if show.tipe_tayangan == 'Film' %}
+                    <td><a href="{% url 'tayangan:film_select' show.id %}" class="btn btn-primary">Lihat Film</a></td>
+                {% else %}
+                    <td><a href="{% url 'tayangan:series_select' show.id %}" class="btn btn-primary">Lihat Series</a></td>
+                {% endif %}
             </tr>
-            <tr>
-                <td>2</td>
-                <td>The Matrix</td>
-                <td>Seorang hacker menemukan bahwa dunia yang ia kenal adalah simulasi. </td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2024-04-21</td>
-                <td>150</td>
-                <td><button type="button" class="btn btn-primary">Lihat Tayangan</button></td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Inception</td>
-                <td>Seorang pencuri pikiran menjelajahi mimpi orang lain.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2020-05-22</td>
-                <td>100</td>
-                <td><button type="button" class="btn btn-primary">Lihat Tayangan</button></td>
-            </tr>
-            <!-- ⋮ Baris lainnya ⋮ -->
+            {% endfor %}
         </tbody>
     </table>
 
