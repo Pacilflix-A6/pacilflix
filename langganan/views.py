@@ -2,13 +2,15 @@ from django.db import connection
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from datetime import datetime, timedelta
-from accounts.sharedpref import *
+from accounts.views import login_required
+
 
 # Create your views here.
+@login_required
 def langganan_page(request):
     paket_langganan = get_all_paket()
-    riwayat_transaksi = get_riwayat_transaksi()
-    langganan_aktif = get_langganan_aktif()
+    riwayat_transaksi = get_riwayat_transaksi(request)
+    langganan_aktif = get_langganan_aktif(request)
     return render(request, 'langganan.html', {'paket_langganan':paket_langganan, 'riwayat_transaksi':riwayat_transaksi, 'langganan_aktif':langganan_aktif})
 
 def get_all_paket():
@@ -25,7 +27,8 @@ def get_all_paket():
     paket_langganan = cursor.fetchall()
     return paket_langganan
 
-def get_riwayat_transaksi():
+def get_riwayat_transaksi(request):
+    username = request.COOKIES.get('username')
     cursor = connection.cursor()
     cursor.execute(
         """
@@ -35,12 +38,13 @@ def get_riwayat_transaksi():
         WHERE t.username = %s
         ORDER BY t.start_date_time DESC
         """,
-        [LoggedInUser.username]
+        [username]
     )
     riwayat_transaksi = cursor.fetchall()
     return riwayat_transaksi
 
-def get_langganan_aktif():
+def get_langganan_aktif(request):
+    username = request.COOKIES.get('username')
     cursor = connection.cursor()
     cursor.execute(
         """
@@ -52,11 +56,12 @@ def get_langganan_aktif():
         AND t.end_date_time > CURRENT_TIMESTAMP
         GROUP BY t.nama_paket, p.harga, p.resolusi_layar, t.start_date_time, t.end_date_time;
         """,
-        [LoggedInUser.username]
+        [username]
     )
     langganan_aktif = cursor.fetchall()
     return langganan_aktif
 
+@login_required
 def beli_langganan_page(request):
     if request.method == 'POST':
         nama = request.POST.get('nama')
@@ -67,10 +72,11 @@ def beli_langganan_page(request):
         return render(request, 'beli_langganan.html', {'nama': nama, 'harga': harga, 'resolusi': resolusi, 'dukungan': dukungan})
     else:
         return HttpResponseBadRequest("Bad request")
-    
+
+@login_required    
 def proses_transaksi(request):
     if request.method == 'POST':
-        username = LoggedInUser.username
+        username = request.COOKIES.get('username')
         nama_paket = request.POST.get('nama')
         metode_pembayaran = request.POST.get('metode_pembayaran')
 

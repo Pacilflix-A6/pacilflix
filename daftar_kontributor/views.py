@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.db import connection
+from accounts.views import login_required
 
+@login_required
 def daftar_kontributor_page(request):
     if request.method == 'POST':
         contributor_type = request.POST.get('contributorType')
