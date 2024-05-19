@@ -195,8 +195,17 @@ def film_select(request, film_id):
         GROUP BY t.id, f.id_tayangan, t.judul, t.sinopsis, t.asal_negara, f.url_video_film, f.release_date_film, f.durasi_film, cs.nama, psc.nama, tv.total_view;
         """)
     film = dictfetchall(cursorb)[0]
+
+    cursora = connection.cursor()
+    cursora.execute("""
+        SELECT judul, timestamp
+        FROM DAFTAR_FAVORIT
+        WHERE username = %s;
+        """, [LoggedInUser.username]
+    )
+    favorites = cursora.fetchall()
     
-    return render(request, 'film.html', {'film': film})
+    return render(request, 'film.html', {'film': film, "favorites":favorites})
 
 def series_select(request, series_id):
     cursorb = connection.cursor()

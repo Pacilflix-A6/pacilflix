@@ -215,9 +215,9 @@
             var judulTayangan = "{{ film.judul_tayangan |urlencode }}"; 
         </script>
         <div class="mb-3 d-flex justify-content-center">
-            <button type="button" class="btn btn-primary me-2" onclick="watchShow('{{ film.id_tayangan }}', document.getElementById('progress-slider').value);">Tonton</button>
-            <button type="button" class="btn btn-primary me-2" onclick="downloadShow(judulTayangan);">Unduh Tayangan</button>
-            <button type="button" class="btn btn-primary me-2" onclick="updateFavoriteAction();">Jadikan Favorit</button>
+          <button type="button" class="btn btn-primary me-2" onclick="watchShow('{{ film.id_tayangan }}', document.getElementById('progress-slider').value);">Tonton</button>
+          <button type="button" class="btn btn-primary me-2" onclick="downloadShow(judulTayangan);">Unduh Tayangan</button>
+          <button type="button" class="btn btn-primary me-2" onclick="updateFavoriteAction();" data-judul-fav="{{ film.judul_tayangan }}">Jadikan Favorit</button>
         </div>
         
         <!-- Progress slider -->
@@ -333,10 +333,6 @@
                 <div class="review-box">
                     <div class="review-header">
                         <div class="review-rating" onload="showRating('{{ ulasan.rating }}')">
-                          <!-- <script>
-                            // Panggil fungsi showRating() dengan rating yang sesuai
-                            showRating(`{{ ulasan.rating }}`);
-                          </script> -->
                           <span class="fas fa-star checked"></span>
                           {{ ulasan.rating }}
                         </div>
@@ -589,11 +585,11 @@
     
         // Fungsi untuk memperbarui form action
         function updateFormAction(judulDaftar) {
-          var judulFav = "Breaking Bad"; 
+          var judulFav = document.querySelector("[data-judul-fav]").getAttribute("data-judul-fav");
           const baseUrl = "{% url 'daftar_favorit:add_favorit' 'FAV' 'LIST' %}"
             .replace("FAV", encodeURIComponent(judulFav))
             .replace("LIST", "placeholder");
-    
+
           var form = document.getElementById("addFavoritForm");
           form.action = baseUrl.replace(
             "placeholder",

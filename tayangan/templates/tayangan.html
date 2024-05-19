@@ -79,6 +79,10 @@
         flex-direction: column;
     }
 
+    .modal-header, .modal-body, .modal-footer {
+        background-color: #000000;
+    }
+
 </style>
 
 <div class="container">
@@ -185,13 +189,12 @@
 
 <!-- Fitur Search -->
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="max-width: 90%;">
+    <div class="modal-dialog" style="max-width: 75%;">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #000000; color: #ED151E;">
+            <div class="modal-header" style="color: #ED151E;">
                 <h5 class="modal-title" id="searchModalLabel">HASIL PENCARIAN</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="background-color: #000000;">
+            <div class="modal-body">
                 <table class="film-table">
                     <thead>
                         <tr>
@@ -202,9 +205,12 @@
                             <th>Tayangan</th>
                         </tr>
                     </thead>
-                    <tbody id="searchResults" style="color: #000000;">
+                    <tbody id="searchResults">
                     </tbody>
                 </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
