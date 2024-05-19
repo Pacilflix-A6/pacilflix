@@ -111,7 +111,35 @@ def trailer(request):
     """)
     series = dictfetchall(cursorb)
 
-    return render(request, "trailer.html", {"films": films, "series": series})
+    # Query untuk mengambil data tayangan terbaik
+    cursorb.execute("""
+            WITH RankedTayangan AS (
+                SELECT 
+                    T.id,
+                    T.judul,
+                    T.sinopsis_trailer,
+                    T.url_video_trailer,
+                    T.release_date_trailer,
+                    COALESCE(FV.total_view, SV.total_view) AS total_view,
+                    CASE
+                    WHEN FV.id_tayangan IS NOT NULL THEN 'Film'
+                    WHEN SV.id_tayangan IS NOT NULL THEN 'Series'
+                    ELSE 'Unknown'
+                    END AS tipe_tayangan,
+                    ROW_NUMBER() OVER (ORDER BY COALESCE(FV.total_view, SV.total_view) DESC) AS peringkat
+                FROM TAYANGAN T
+                LEFT JOIN FILM_VIEWERS_LAST_7_DAYS FV ON T.id = FV.id_tayangan
+                LEFT JOIN SERIES_VIEWERS_LAST_7_DAYS SV ON T.id = SV.id_tayangan
+                )
+                SELECT id, judul, sinopsis_trailer, url_video_trailer, release_date_trailer, total_view, tipe_tayangan, peringkat
+                FROM RankedTayangan
+                WHERE peringkat <= 10
+                ORDER BY peringkat;
+                    """)
+    
+    best_shows = dictfetchall(cursorb)
+
+    return render(request, "trailer.html", {"films": films, "series": series, "best_shows": best_shows})
 
 def film_select(request, film_id):
     cursorb = connection.cursor()
