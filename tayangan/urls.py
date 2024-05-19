@@ -1,11 +1,12 @@
 from django.urls import path
-from tayangan.views import tayangan, trailer, film, series, episode, film_select, tonton, series_select, ulas, episode_select
+from tayangan.views import tayangan, trailer, film, series, episode, film_select, tonton, series_select, ulas, episode_select, search_tayangan
 
 app_name = 'tayangan'
 
 urlpatterns = [
     path('trailer/', trailer, name='trailer'),
     path('', tayangan, name='tayangan'),
+    path('search_tayangan/', search_tayangan, name='search_tayangan'),
     path('film/<uuid:film_id>/', film_select, name='film_select'),
     path('film/', film, name='film'),
     path('series/<uuid:series_id>/', series_select, name='series_select'),

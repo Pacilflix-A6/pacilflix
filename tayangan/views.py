@@ -17,6 +17,32 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
+def search_tayangan(request):
+    cursor = connection.cursor()
+    search_query = request.GET.get('q', '')
+
+    # Query untuk mencari film berdasarkan judul
+    cursor.execute(f"""
+        SELECT t.id, t.judul, t.sinopsis_trailer, t.url_video_trailer, t.release_date_trailer, 'Film' AS tipe_tayangan
+        FROM TAYANGAN AS t
+        JOIN FILM AS f ON f.id_tayangan = t.id
+        WHERE t.judul ILIKE %s;
+    """, [f'%{search_query}%'])
+    searched_films = dictfetchall(cursor)
+
+    # Query untuk mencari series berdasarkan judul
+    cursor.execute(f"""
+        SELECT t.id, t.judul, t.sinopsis_trailer, t.url_video_trailer, t.release_date_trailer, 'Series' AS tipe_tayangan
+        FROM TAYANGAN AS t
+        JOIN SERIES AS s ON s.id_tayangan = t.id
+        WHERE t.judul ILIKE %s;
+    """, [f'%{search_query}%'])
+    searched_series = dictfetchall(cursor)
+
+    results = searched_films + searched_series
+
+    return JsonResponse({"results": results})
+
 def tayangan(request):
     cursorb = connection.cursor()
 

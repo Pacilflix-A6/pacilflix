@@ -51,10 +51,6 @@
         color: #f2f2f2;
     }
 
-    .modal-text {
-        color: #000000;
-    }
-
     /* Modal */
     .modal-dialog {
         max-width: 800px;
@@ -91,7 +87,7 @@
     <!-- Input Pencarian Tayangan -->
     <div class="input-group" style="display: flex;">
         <input type="text" class="form-control" placeholder="Input Judul Film/Series" id="searchInput" style="flex-grow: 1;">
-        <button class="btn btn-primary" type="button" id="searchButton" style="width: 100px;">Search</button>
+        <button class="btn btn-primary" type="button" id="searchButton" style="width: 100px;" disabled>Search</button>
     </div>    
 
     <h2>Top 10 Global Tayangan</h2>
@@ -189,13 +185,13 @@
 
 <!-- Fitur Search -->
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width: 90%;">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #000000; color: #ED151E;">
                 <h5 class="modal-title" id="searchModalLabel">HASIL PENCARIAN</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="background-color: #000000;">
                 <table class="film-table">
                     <thead>
                         <tr>
@@ -203,18 +199,10 @@
                             <th>Sinopsis Trailer</th>
                             <th>URL Trailer</th>
                             <th>Tanggal Rilis Trailer</th>
-                            <th>Tanggal Rilis Trailer</th>
+                            <th>Tayangan</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="modal-text">Interstellar</td>
-                            <td class="modal-text">Atronot yang ditugaskan untuk menemukan planet baru yang layak huni untuk umat manusia ke depannya.</td>
-                            <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                            <td class="modal-text">10-11-2024</td>
-                            <td><button type="button" class="btn btn-primary">Lihat Tayangan</button></td>
-                        </tr>
-                        <!-- Tambahkan baris untuk hasil pencarian lainnya di sini jika ada -->
+                    <tbody id="searchResults" style="color: #000000;">
                     </tbody>
                 </table>
             </div>
@@ -224,8 +212,58 @@
 
 <script>
     document.getElementById('searchButton').addEventListener('click', function () {
+        var query = document.getElementById('searchInput').value;
         console.log("Search button clicked!");
-        $('#searchModal').modal('show');
+        
+        // Encode the query to make it URL-safe
+        var encodedQuery = encodeURIComponent(query);
+        
+        // Construct the URL with the encoded query
+        const url = '/tayangan/search_tayangan/?q=' + encodedQuery;
+
+
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            var results = data.results;
+            var resultsTable = document.getElementById('searchResults');
+            resultsTable.innerHTML = '';
+
+            results.forEach(result => {
+                var row = `
+                <tr>
+                    <td>${result.judul}</td>
+                    <td>${result.sinopsis_trailer}</td>
+                    <td>${result.url_video_trailer}</td>
+                    <td>${result.release_date_trailer}</td>
+                    <td>
+                        <a href="${result.tipe_tayangan === 'Film' ? '/tayangan/film/' : '/tayangan/series/'}${result.id}" class="btn btn-primary">Lihat</a>
+                    </td>
+                </tr>`;
+                resultsTable.innerHTML += row;
+            });
+
+            var searchModal = new bootstrap.Modal(document.getElementById('searchModal'), {
+                keyboard: false
+            });
+            searchModal.show();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    // Mencegah tombol pencarian diklik jika input kosong
+    document.getElementById('searchInput').addEventListener('input', function () {
+        var query = this.value.trim();
+        var searchButton = document.getElementById('searchButton');
+
+        // Jika input kosong, nonaktifkan tombol pencarian
+        if (query === '') {
+            searchButton.disabled = true;
+        } else {
+            searchButton.disabled = false;
+        }
     });
 </script>
 {% endblock content %}
