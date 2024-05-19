@@ -6,509 +6,619 @@
 
 {% block content %}
 <style>
-    /* Konten Container */
-    .container {
-        margin-top: 50px;
-    }
+  /* Konten Container */
+  .container {
+    margin-top: 50px;
+  }
 
-    /* Input Pencarian */
-    .input-group {
-        width: 100%;
-        margin-bottom: 20px;
-        flex-grow: 1;
-    }
+  /* Input Pencarian */
+  .input-group {
+    width: 100%;
+    margin-bottom: 20px;
+    flex-grow: 1;
+  }
 
-    /* Opsi Top 10 */
-    .btn-primary {
-        margin-right: 10px;
-        background-color: #ED151E;
-        border-color: #ED151E;
-    }
+  /* Opsi Top 10 */
+  .btn-primary {
+    margin-right: 10px;
+    background-color: #ED151E;
+    border-color: #ED151E;
+  }
 
-    /* Tabel Tayangan Terbaik */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-        border-radius: 10px; /* Mengatur sudut ujung tabel */
-        overflow: hidden; /* Menghindari overflow dari border-radius */
-    }
+  /* Tabel Tayangan Terbaik */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    /* Mengatur sudut ujung tabel */
+    overflow: hidden;
+    /* Menghindari overflow dari border-radius */
+  }
 
-    th, td {
-        padding: 10px;
-        border: 2px solid #f2f2f2;
-        text-align: center;
-        font-family: 'Roboto';
-    }
+  th,
+  td {
+    padding: 10px;
+    border: 2px solid #f2f2f2;
+    text-align: center;
+    font-family: 'Roboto';
+  }
 
-    th {
-        background-color: #f2f2f2;
-        vertical-align: top;
-    }
+  th {
+    background-color: #f2f2f2;
+    vertical-align: top;
+  }
 
-    td {
-        color: #f2f2f2;
-        text-align: left;
-    }
+  td {
+    color: #f2f2f2;
+    text-align: left;
+  }
 
-    /* Modal */
-    .modal-dialog {
-        max-width: 800px;
-    }
+  /* Modal */
+  .modal-dialog {
+    max-width: 800px;
+  }
 
-    h1, h2, h3 {
-        color: #ED151E;
-        font-family: 'Bebas Neue', sans-serif;
-        text-align: center;
-    }
+  h1,
+  h2,
+  h3 {
+    color: #ED151E;
+    font-family: 'Bebas Neue', sans-serif;
+    text-align: center;
+  }
 
-    .review-container {
-        margin-bottom: 20px;
-        background: #111;
-        padding: 20px 30px;
-        border: 1px solid #444;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
+  .review-container {
+    margin-bottom: 20px;
+    background: #111;
+    padding: 20px 30px;
+    border: 1px solid #444;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
 
-    .review-container .star-widget input {
-        display: none;
-    }
+  .review-container .star-widget input {
+    display: none;
+  }
 
-    .star-widget label {
-        font-size: 35px;
-        color: #444;
-        padding: 10px;
-        float: right;
-        transition: all 0.2s ease;
-    }
-    
-    input:not(:checked) ~ label:hover,
-    input:not(:checked) ~ label:hover ~ label {
-        color: #fd4;
-    }
+  .star-widget label {
+    font-size: 35px;
+    color: #444;
+    padding: 10px;
+    float: right;
+    transition: all 0.2s ease;
+  }
 
-    input:checked ~ label {
-        color: #fd4;
-    }
+  .star-widget input:not(:checked)~label:hover,
+  .star-widget input:not(:checked)~label:hover~label {
+    color: #fd4;
+  }
 
-    form .textarea {
-        height: 100px;
-        width: 100%;
-        overflow: hidden;
-    }
+  .star-widget input:checked~label {
+    color: #fd4;
+  }
 
-    form .textarea textarea {
-        height: 100%;
-        width: 100%;
-        outline: none;
-        color: #eee;
-        border: 1px solid #333;
-        border-radius: 5px;
-        background: #222;
-        padding: 10px;
-        font-size: 17px;
-        resize: none; 
-    }
+  form .textarea {
+    height: 100px;
+    width: 100%;
+    overflow: hidden;
+  }
 
-    form .btn {
-        height: 45px;
-        width: 100%;
-        margin: 15px 0;
-    }
+  form .textarea textarea {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    color: #eee;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background: #222;
+    padding: 10px;
+    font-size: 17px;
+    resize: none;
+  }
 
-    form .btn button{
-        height: 100%;
-        width: 100%;
-        border: 1px;
-        outline: none;
-        background: #222 ;
-        color: #999;
-        font-size: 17px;
-        font-weight: 500;
-        border-radius: 5px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+  form .btn {
+    height: 45px;
+    width: 100%;
+    margin: 15px 0;
+  }
 
-    form .btn button:hover {
-        background: #1b1b1b;
-    }
+  form .btn button {
+    height: 100%;
+    width: 100%;
+    border: 1px;
+    outline: none;
+    background: #222;
+    color: #999;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
 
-    /* Gaya untuk Kotak Ulasan */
-    .review-box {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 15px;
-        margin-bottom: 20px;
-        background-color: #f9f9f9;
-    }
+  form .btn button:hover {
+    background: #1b1b1b;
+  }
 
-    .review-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-    }
+  /* Gaya untuk Kotak Ulasan */
+  .review-box {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+  }
 
-    .review-title {
-        margin: 0;
-    }
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
 
-    .review-rating {
-        color: #ffd700; /* Warna bintang */
-    }
+  .review-title {
+    margin: 0;
+  }
 
-    .review-content {
-        margin-bottom: 10px;
-    }
+  .review-rating {
+    color: #000;
+    /* Warna bintang */
+  }
 
-    .review-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: #777; /* Warna teks footer */
-        font-size: 14px;
-    }
+  .review-content {
+    margin-bottom: 10px;
+  }
 
+  .review-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #777;
+    /* Warna teks footer */
+    font-size: 14px;
+  }
+
+  /* Gaya untuk slider dan teks progres */
+  .slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+    color: #f2f2f2;
+  }
+
+  .slider-wrapper {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  #progress-slider {
+    width: 100%;
+    margin-right: 10px;
+  }
+
+  #progress-value {
+    min-width: 50px;
+    text-align: left;
+  }
 </style>
+
 <body>
 
-    <div class="container mt-5">
-        <h1>HALAMAN FILM</h1>
-    
-        <!-- Judul Film -->
-        <h2>Interstellar<data></h2>
-    
-        <!-- Tombol-->
-        <!-- bagian 'Das Leben... tolong ganti judul film yg udh connect ke db yaa'-->
-        <script>
-            var judulTayangan = "{{ 'Das Leben der Anderen'|urlencode }}"; 
-        </script>
-        <div class="mb-3 d-flex justify-content-center">
-            <button type="button" class="btn btn-primary me-2">Tonton</button>
-            <button type="button" class="btn btn-primary me-2" onclick="downloadShow(judulTayangan);">Unduh Tayangan</button>
-            <button type="button" class="btn btn-primary me-2" onclick="updateFavoriteAction();">Jadikan Favorit</button>
-        </div>
-    
-    
-        <!-- Tabel Data Film -->
-        <table class="film-table">
-            <tbody>
-                <tr>
-                    <th>Total View</th>
-                    <td>200</td>
-                </tr>
-                <tr>
-                    <th>Rating</th>
-                    <td>8.7</td>
-                </tr>
-                <tr>
-                    <th>Sinopsis</th>
-                    <td>Astronot yang ditugaskan untuk menemukan planet baru yang layak huni untuk umat manusia ke depannya.</td>
-                </tr>
-                <tr>
-                    <th>Durasi Film</th>
-                    <td>124 Menit</td>
-                </tr>
-                <tr>
-                    <th>Tanggal Rilis Film</th>
-                    <td>06-11-2014</td>
-                </tr>
-                <tr>
-                    <th>URL Film</th>
-                    <td><button type="button" class="btn btn-primary me-2">Tonton</button></td>
-                </tr>
-                <tr>
-                    <th>Genre</th>
-                    <td>
-                        <div class="genre-buttons">
-                            <button type="button" class="btn btn-secondary" disabled>Sains Ilmiah</button>
-                            <!-- ⋮ Genre lainnya ⋮ -->
-                            <button type="button" class="btn btn-secondary" disabled>Aksi</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Asal Negara</th>
-                    <td>Amerika Serikat</td>
-                </tr>
-                <tr>
-                    <th>Pemain</th>
-                    <td>
-                        <ul>
-                            <li>Matthew McConaughey</li>
-                            <!-- ⋮ Cast lainnya ⋮ -->
-                            <li>Anne Hathaway</li>
-                            <li>Jessica Chastain</li>
-                            <li>Michael Caine</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Penulis Skenario</th>
-                    <td>
-                        <ul>
-                            <li>Jonathan Nolan</li>
-                            <li>Christopher Nolan</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Sutradara</th>
-                    <td>The GOAT Christopher Nolan</td>
-                </tr>
-            </tbody>
-        </table>
-    
-        <!-- Bagian Ulasan -->
-        <h2>ULASAN</h2>
-    
-        <!-- Input Ulasan -->
-        <div class="review-container">
-            <!-- <input type="text" class="form-control" placeholder="Input untuk deskripsi ulasan" id="reviewDescriptionInput"> -->
-            <div class="star-widget">
-                <input type="radio" id="rate-5" name="rate" value="5"><label for="star5" class="fas fa-star"></label>
-                <input type="radio" id="rate-4" name="rate" value="4"><label for="star4" class="fas fa-star"></label>
-                <input type="radio" id="rate-3" name="rate" value="3"><label for="star3" class="fas fa-star"></label>
-                <input type="radio" id="rate-2" name="rate" value="2"><label for="star2" class="fas fa-star"></label>
-                <input type="radio" id="rate-1" name="rate" value="1"><label for="star1" class="fas fa-star"></label>
-                <form action="#">
-                    <div class="textarea">
-                        <textarea cols="30" placeholder="Ceritakan pendapatmu di sini.."></textarea>
-                    </div>
-                    <div class="btn">
-                        <button type="submit">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    
-        <!-- Daftar Ulasan -->
-        <h2>DAFTAR ULASAN</h2>
-        <div class="review-list">
-            <div class="review-item">
-                <div class="review-box">
-                    <div class="review-header">
-                        <div class="review-rating">
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star"></span>
-                        </div>
-                    </div>
-                    <div class="review-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet aliquam nisi id pulvinar.</p>
-                    </div>
-                    <div class="review-footer">
-                        <span class="review-author">Hilmy Gondrong</span>
-                        <span class="review-date">Apr 29, 2024</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Ulasan lainnya ditambahkan di sini -->
-            <div class="review-item">
-                <div class="review-box">
-                    <div class="review-header">
-                        <div class="review-rating">
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star checked"></span>
-                            <span class="fas fa-star"></span>
-                        </div>
-                    </div>
-                    <div class="review-content">
-                        <p>Wah keren filmnya, btw lu kenapa My?</p>
-                    </div>
-                    <div class="review-footer">
-                        <span class="review-author">Bmo</span>
-                        <span class="review-date">May 2, 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="container mt-5">
+    <h1>HALAMAN FILM</h1>
+
+    <!-- Judul Film -->
+    <h2>{{ film.judul_tayangan }}</h2>
+
+    <!-- Tombol-->
+    <script>
+      var judulTayangan = "{{ film.judul_tayangan |urlencode }}"; 
+    </script>
+    <div class="mb-3 d-flex justify-content-center">
+      <button type="button" class="btn btn-primary me-2"
+        onclick="watchShow('{{ film.id_tayangan }}', document.getElementById('progress-slider').value);">Tonton</button>
+      <button type="button" class="btn btn-primary me-2" onclick="downloadShow(judulTayangan);">Unduh Tayangan</button>
+      <button type="button" class="btn btn-primary me-2" onclick="triggerModalfavorite();" data-judul-fav="{{ film.judul_tayangan }}">Jadikan Favorit</button>
     </div>
-    
-    
-    <!-- ini modal buat download-->
-    <div
-        class="modal fade"
-        id="confirmDownloadModal"
-        tabindex="-1"
-        aria-labelledby="confirmDownloadModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5
-                style="color: #cc1218"
-                class="modal-title"
-                id="confirmDownloadModalLabel"
-              >
-                SUKSES MENAMBAHKAN TAYANGAN KE DAFTAR UNDUHAN
-              </h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+
+    <!-- Progress slider -->
+    <div class="slider-container">
+      <div class="slider-wrapper">
+        <label for="progress-slider">Progres Menonton:</label>
+        <input type="range" id="progress-slider" name="progress-slider" min="0" max="{{ film.durasi_film }}" value="0"
+          oninput="updateSliderValue(this.value, '{{ film.durasi_film }}')">
+        <span id="progress-value">0%</span>
+      </div>
+    </div>
+
+    <!-- Tabel Data Film -->
+    <table class="film-table">
+      <tbody>
+        <tr>
+          <th>Total View</th>
+          <td>{{ film.total_view }}</td>
+        </tr>
+        <tr>
+          <th>Rating</th>
+          <td>{{ film.rating_rata_rata }}</td>
+        </tr>
+        <tr>
+          <th>Sinopsis</th>
+          <td>{{ film.sinopsis_tayangan }}</td>
+        </tr>
+        <tr>
+          <th>Durasi Film</th>
+          <td>{{ film.durasi_film }} Menit</td>
+        </tr>
+        <tr>
+          <th>Tanggal Rilis Film</th>
+          <td>{{ film.release_date_film }}</td>
+        </tr>
+        <tr>
+          <th>URL Film</th>
+          <td>{{ film.url_video_film }}</td>
+        </tr>
+        <tr>
+          <th>Genre</th>
+          <td>
+
+            <div class="genre-buttons">
+              {% for genre in film.genre %}
+              <button type="button" class="btn btn-secondary" disabled>{{ genre }}</button>
+              {% endfor %}
             </div>
-            <div style="color: #cc1218" class="modal-body">
-              Selamat! Anda telah berhasil mengunduh Everything Everywhere All At
-              Once dan akan berlaku hingga [current time + 7 hari]. Cek informasi
-              selengkapnya pada halaman daftar unduhan.
+          </td>
+        </tr>
+        <tr>
+          <th>Asal Negara</th>
+          <td>{{ film.asal_negara }}</td>
+        </tr>
+        <tr>
+          <th>Pemain</th>
+          <td>
+            <ul>
+              {% for actor in film.pemain %}
+              <li> {{ actor }} </li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <th>Penulis Skenario</th>
+          <td>
+            <ul>
+              {% for writer in film.penulis_skenario %}
+              <li> {{ writer }} </li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <th>Sutradara</th>
+          <td>{{ film.sutradara }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Bagian Ulasan -->
+    <h2>ULASAN</h2>
+
+    <!-- Input Ulasan -->
+    <div class="review-container">
+      <div class="star-widget">
+        <input type="radio" id="rate-5" name="rate" value="5">
+        <label for="rate-5" class="fas fa-star"></label>
+        <input type="radio" id="rate-4" name="rate" value="4">
+        <label for="rate-4" class="fas fa-star"></label>
+        <input type="radio" id="rate-3" name="rate" value="3">
+        <label for="rate-3" class="fas fa-star"></label>
+        <input type="radio" id="rate-2" name="rate" value="2">
+        <label for="rate-3" class="fas fa-star"></label>
+        <input type="radio" id="rate-1" name="rate" value="1">
+        <label for="rate-1" class="fas fa-star"></label>
+        <form action="ulas">
+          <div class="textarea">
+            <textarea id="reviewDescription" cols="30" placeholder="Ceritakan pendapatmu di sini.."></textarea>
+          </div>
+          <div class="btn">
+            <button type="button" onclick="addReview()">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Daftar Ulasan -->
+    <h2>DAFTAR ULASAN</h2>
+    <div class="review-list">
+      <div class="review-item">
+        {% for ulasan in film.kumpulan_ulasan %}
+        <div class="review-box">
+          <div class="review-header">
+            <div class="review-rating" onload="showRating('{{ ulasan.rating }}')">
+              <span class="fas fa-star checked"></span>
+              {{ ulasan.rating }}
+            </div>
+          </div>
+          <div class="review-content">
+            <p>{{ ulasan.deskripsi }}</p>
+          </div>
+          <div class="review-footer">
+            <span class="review-author">{{ ulasan.username }}</span>
+            <span class="review-date">{{ ulasan.timestamp }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- ini modal buat download-->
+    <div class="modal fade" id="confirmDownloadModal" tabindex="-1" aria-labelledby="confirmDownloadModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 style="color: #cc1218" class="modal-title" id="confirmDownloadModalLabel">SUKSES MENAMBAHKAN TAYANGAN KE
+              DAFTAR UNDUHAN</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div style="color: #cc1218" class="modal-body">
+            Selamat! Anda telah berhasil mengunduh Everything Everywhere All At
+            Once dan akan berlaku hingga [current time + 7 hari]. Cek informasi
+            selengkapnya pada halaman daftar unduhan.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              Close
+            </button>
+            <a type="button" class="btn btn-danger" href="{% url 'daftar_unduhan:daftar_unduhan_page' %}"> Menuju Daftar
+              Unduhan </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ini modal buat favorit-->
+    <div class="modal fade" id="confirmAddModel" tabindex="-1" aria-labelledby="confirmAddModelLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 style="color: #cc1218" class="modal-title" id="confirmAddModelLabel">TAMBAH KE DAFTAR FAVORIT</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="addFavoritForm" method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+              <label for="fav-list">Judul Daftar Favorit:</label>
+              <select name="judul_daftar" id="fav-list" class="form-control">
+                {% for favorite in favorites %}
+                <option value="{{ favorite.0 }}">{{ favorite.0 }}</option>
+                {% endfor %}
+              </select>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                Close
-              </button>
-              <a type="button" class="btn btn-danger" href="{% url 'daftar_unduhan:daftar_unduhan_page' %}"> Menuju Daftar Unduhan </a>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-danger" onclick="updateFormAction()">Tambah</button>
             </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="errorModalLabel" style="color: #cc1218">Pengiriman Gagal</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="errorModalBody">
+            <!-- Error message will be injected here -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
           </div>
         </div>
       </div>
-    
-      <!-- ini modal buat favorit-->
-      <div
-        class="modal fade"
-        id="confirmAddModel"
-        tabindex="-1"
-        aria-labelledby="confirmAddModelLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5
-                style="color: #cc1218"
-                class="modal-title"
-                id="confirmAddModelLabel"
-              >
-                TAMBAH KE DAFTAR FAVORIT
-              </h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form id="addFavoritForm" method="post">
-              {% csrf_token %}
-              <div class="modal-body">
-                <label for="fav-list">Judul Daftar Favorit:</label>
-                <select name="judul_daftar" id="fav-list" class="form-control">
-                  {% for favorite in favorites %}
-                  <option value="{{ favorite.0 }}">{{ favorite.0 }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Batal
-                </button>
-                <button type="submit" class="btn btn-danger">Tambah</button>
-              </div>
-            </form>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel" style="color: #000">Pengiriman Berhasil</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="infoModalBody">
+            <!-- Info message will be injected here -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
           </div>
         </div>
       </div>
-      
+    </div>
+
     <script>
-        // Izin commentin script lu ya bimo, gaada id submitReviewButton jadi function lain error
+      document.addEventListener("DOMContentLoaded", function () {
+        // Ambil referensi modal
+        var infoModal = document.getElementById("infoModal");
 
-        // document.getElementById('submitReviewButton').addEventListener('click', function () {
-        //     // Mendapatkan review, rating, dan username
-        //     var reviewDescription = document.getElementById('reviewDescriptionInput').value;
-        //     var reviewRating = document.getElementById('reviewRatingInput').value;
-        //     var username = "John Doe"; // Example username\
-    
-        //     // Buat list item baru untuk review
-        //     var newReview = document.createElement('li');
-        //     newReview.textContent = username + ": " + reviewDescription + ' - Rating: ' + reviewRating;
-    
-        //     // Tambah review ke daftar review
-        //     document.getElementById('reviewList').appendChild(newReview);
-    
-        //     // Clear input
-        //     document.getElementById('reviewDescriptionInput').value = '';
-        //     document.getElementById('reviewRatingInput').value = '0'; //default
-        // });
+        setTimeout(function () {
+          // Tutup modal
+          $('#infoModal').modal('hide');
+        }, 3000); // Ubah angka 3000 menjadi jumlah milidetik yang diinginkan
+      });
 
-        
-        function updateFavoriteAction() {
-          var modal = document.getElementById("confirmAddModel");
-          var judulDaftar = document.getElementById("fav-list").value;
-          updateFormAction(judulDaftar); 
-    
-          new bootstrap.Modal(modal).show();
-        }
-    
-        // Fungsi untuk memperbarui form action
-        function updateFormAction(judulDaftar) {
-          var judulFav = "Breaking Bad"; 
-          const baseUrl = "{% url 'daftar_favorit:add_favorit' 'FAV' 'LIST' %}"
-            .replace("FAV", encodeURIComponent(judulFav))
-            .replace("LIST", "placeholder");
-    
-          var form = document.getElementById("addFavoritForm");
-          form.action = baseUrl.replace(
-            "placeholder",
-            encodeURIComponent(judulDaftar)
-          );
-        }
-    
-        document.addEventListener("DOMContentLoaded", function () {
-          var select = document.getElementById("fav-list");
-          select.addEventListener("change", function () {
-            updateFormAction(this.value); 
-          });
-        });
-        
-        function downloadShow(judul1) {
-          fetch(
-            "{% url 'daftar_unduhan:add_download' 'placeholder' %}".replace(
-              "placeholder",
-              judul1
-            ),
-            {
-              method: "POST",
-              headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-              },
+      function updateSliderValue(value, duration) {
+        var progressValue = document.getElementById("progress-value");
+        var percentage = (value / duration) * 100;
+        progressValue.textContent = percentage.toFixed(2) + "%";
+      }
+
+      function watchShow(idTayangan, durasiTonton) {
+        const url = "{% url 'tayangan:tonton' film.id_tayangan %}";
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({
+            id_tayangan: idTayangan,
+            durasi_tonton: durasiTonton
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === "success") {
+              console.log("Tonton berhasil disimpan ke riwayat.");
+              location.reload();
+            } else {
+              console.error("Gagal menyimpan tonton ke riwayat.");
             }
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.status === "success") {
-                var current_time_plus_seven = new Date();
-                current_time_plus_seven.setDate(
-                  current_time_plus_seven.getDate() + 7
-                );
-    
-                document.querySelector(
-                  ".modal-body"
-                ).innerHTML = `Selamat! Anda telah berhasil mengunduh ${decodeURIComponent(judul1)} dan akan berlaku hingga ${current_time_plus_seven.toLocaleString()}. Cek informasi selengkapnya pada halaman daftar unduhan.`;
-                $("#confirmDownloadModal").modal("show");
-              }
-            });
-        };
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+      }
+
+      function addReview() {
+        const url = "{% url 'tayangan:ulas' film.id_tayangan %}";
+
+        // Mendapatkan nilai rating
+        var rating = document.querySelector('input[name="rate"]:checked').value;
+        console.log(rating);
+
+        // Mendapatkan deskripsi ulasan
+        var deskripsi = document.getElementById('reviewDescription').value;
+        console.log(deskripsi)
+
+        // Mengirim data ulasan ke server
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({
+            rating: rating,
+            deskripsi: deskripsi
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'success') {
+              document.getElementById('infoModalBody').textContent = data.message;
+              $('#infoModal').modal('show');
+              setTimeout(function () {
+                location.reload();
+              }, 2000);
+
+            } else {
+              // Inject error message into modal
+              document.getElementById('errorModalBody').textContent = data.error;
+              // Show the modal
+              $('#errorModal').modal('show');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('errorModalBody').textContent = data.error;
+            $('#errorModal').modal('show');
+          });
+      }
+
+      function triggerModalfavorite() {
+        var modal = document.getElementById("confirmAddModel");
+        new bootstrap.Modal(modal).show();
+      }
+
+      // Fungsi untuk memperbarui form action
+      function updateFormAction() {
+        var judulFav = document.querySelector("[data-judul-fav]").getAttribute("data-judul-fav");
+        var judulDaftar = document.getElementById("fav-list").value;
+
+        const url = "{% url 'daftar_favorit:add_favorit' 'FAV' 'LIST' %}"
+          .replace("FAV", encodeURIComponent(judulFav))
+          .replace("LIST", encodeURIComponent(judulDaftar));
+
+        // Mengirim data ke server
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({
+            judulFav: judulFav,
+            judulDaftar: judulDaftar
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'success') {
+              document.getElementById('infoModalBody').textContent = data.message;
+              $('#infoModal').modal('show');
+
+            } else {
+              // Inject error message into modal
+              document.getElementById('errorModalBody').textContent = data.error;
+              // Show the modal
+              $('#errorModal').modal('show');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('errorModalBody').textContent = 'Terjadi kesalahan. Silakan coba lagi.';
+            $('#errorModal').modal('show');
+          });
+      }
+
+      function downloadShow(judul1) {
+        fetch(
+          "{% url 'daftar_unduhan:add_download' 'placeholder' %}".replace(
+            "placeholder",
+            judul1
+          ),
+          {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": "{{ csrf_token }}",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "success") {
+              var current_time_plus_seven = new Date();
+              current_time_plus_seven.setDate(
+                current_time_plus_seven.getDate() + 7
+              );
+
+              document.querySelector(
+                ".modal-body"
+              ).innerHTML = `Selamat! Anda telah berhasil mengunduh ${decodeURIComponent(judul1)} dan akan berlaku hingga ${current_time_plus_seven.toLocaleString()}. Cek informasi selengkapnya pada halaman daftar unduhan.`;
+              $("#confirmDownloadModal").modal("show");
+            }
+          });
+      };
     </script>
 </body>
 {% endblock content %}

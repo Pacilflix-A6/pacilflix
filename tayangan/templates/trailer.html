@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
@@ -31,11 +30,14 @@
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
-        border-radius: 10px; /* Mengatur sudut ujung tabel */
-        overflow: hidden; /* Menghindari overflow dari border-radius */
+        border-radius: 10px;
+        /* Mengatur sudut ujung tabel */
+        overflow: hidden;
+        /* Menghindari overflow dari border-radius */
     }
 
-    th, td {
+    th,
+    td {
         padding: 10px;
         border-bottom: 1px solid #ED151E;
         text-align: center;
@@ -60,47 +62,53 @@
         max-width: 800px;
     }
 
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
         color: #ED151E;
         font-family: 'Bebas Neue', sans-serif;
         text-align: center;
+        padding-top: 20px;
     }
-    
+
     .d-flex {
         display: flex;
     }
-    
+
     .justify-content-between {
         justify-content: space-between;
     }
-    
+
     .align-items-center {
         align-items: center;
     }
-    
+
     .flex-column {
         flex-direction: column;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        background-color: #000000;
     }
 
 </style>
 
 <div class="container">
     <h1>DAFTAR TAYANGAN</h1>
-    
+
     <!-- Input Pencarian Tayangan -->
     <div class="input-group" style="display: flex;">
-        <input type="text" class="form-control" placeholder="Input Judul Film/Series" id="searchInput" style="flex-grow: 1;">
-        <button class="btn btn-primary" type="button" id="searchButton" style="width: 100px;">Search</button>
-    </div>    
-
-    <!-- Opsi Top 10 -->
-    <div class="d-flex justify-content-end mt-3">
-        <button type="button" class="btn btn-primary me-2">Top 10 Global</button>
-        <button type="button" class="btn btn-primary">Top 10 Negara Pengguna</button>
+        <input type="text" class="form-control" placeholder="Input Judul Film/Series" id="searchInput"
+            style="flex-grow: 1;">
+        <button class="btn btn-primary" type="button" id="searchButton" style="width: 100px;" disabled>Search</button>
     </div>
 
+    <h2>Top 10 Global Tayangan</h2>
+
     <!-- Spasi -->
-    <div style="margin-bottom: 20px;"></div> 
+    <div style="margin-bottom: 20px;"></div>
 
     <!-- Tabel Tayangan Terbaik -->
     <table class="table table-striped">
@@ -108,39 +116,24 @@
             <tr>
                 <th>Peringkat</th>
                 <th>Judul</th>
-                <th>Sinopsis</th>
-                <th>Trailer</th>
-                <th>Tanggal Rilis</th>
+                <th>Sinopsis Trailer</th>
+                <th>URL Trailer</th>
+                <th>Tanggal Rilis Trailer</th>
                 <th>Total View 7 Hari Terakhir</th>
             </tr>
         </thead>
         <tbody>
             <!-- Data tayangan terbaik -->
+            {% for show in best_shows %}
             <tr>
-                <td>1</td>
-                <td>Interstellar</td>
-                <td>Atronot yang ditugaskan untuk menemukan planet baru yang layak huni untuk umat manusia ke depannya.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>06-11-2014</td>
-                <td>200</td>
+                <td>{{ show.peringkat }}</td>
+                <td>{{ show.judul }}</td>
+                <td>{{ show.sinopsis_trailer }}</td>
+                <td>{{ show.url_video_trailer }}</td>
+                <td>{{ show.release_date_trailer }}</td>
+                <td>{{ show.total_view }}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>The Matrix</td>
-                <td>Seorang hacker menemukan bahwa dunia yang ia kenal adalah simulasi. </td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2024-04-21</td>
-                <td>150</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Inception</td>
-                <td>Seorang pencuri pikiran menjelajahi mimpi orang lain.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2020-05-22</td>
-                <td>100</td>
-            </tr>
-            <!-- ⋮ Baris lainnya ⋮ -->
+            {% endfor %}
         </tbody>
     </table>
 
@@ -151,32 +144,21 @@
         <thead>
             <tr>
                 <th>Judul</th>
-                <th>Sinopsis</th>
-                <th>Trailer</th>
-                <th>Tanggal Rilis</th>
+                <th>Sinopsis Trailer</th>
+                <th>URL Trailer</th>
+                <th>Tanggal Rilis Trailer</th>
             </tr>
         </thead>
         <tbody>
             <!-- Data film -->
+            {% for film in films %}
             <tr>
-                <td>Inception</td>
-                <td>Seorang pencuri pikiran menjelajahi mimpi orang lain.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2020-05-22</td>
+                <td>{{ film.judul }}</td>
+                <td>{{ film.sinopsis_trailer }}</td>
+                <td>{{ film.url_video_trailer }}</td>
+                <td>{{ film.release_date_trailer }}</td>
             </tr>
-            <!-- ⋮ baris lainnya ⋮ -->
-            <tr>
-                <td>Interstellar</td>
-                <td>Atronot yang ditugaskan untuk menemukan planet baru yang layak huni untuk umat manusia ke depannya.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>06-11-2014</td>
-            </tr>
-            <tr>
-                <td>The Matrix</td>
-                <td>Seorang hacker menemukan bahwa dunia yang ia kenal adalah simulasi. </td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2024-04-21</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
@@ -189,62 +171,46 @@
                 <th>Judul</th>
                 <th>Sinopsis</th>
                 <th>Trailer</th>
-                <th>Tanggal Rilis</th>
+                <th>Tanggal Rilis Trailer</th>
             </tr>
         </thead>
         <tbody>
             <!-- Data series -->
+            {% for show in series %}
             <tr>
-                <td>Game of Thrones</td>
-                <td>Berbagai keluarga bangsawan berjuang untuk menguasai Tanah Seven Kingdoms.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2019-05-05</td>
+                <td>{{ show.judul }}</td>
+                <td>{{ show.sinopsis_trailer }}</td>
+                <td>{{ show.url_video_trailer }}</td>
+                <td>{{ show.release_date_trailer }}</td>
             </tr>
-            <!-- ⋮ Baris lainnya ⋮ -->
-            <tr>
-                <td>Breaking Bad</td>
-                <td>Seorang guru kimia yang putus asa menjadi produsen dan penjual metamfetamin.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2018-08-07</td>
-            </tr>
-            <tr>
-                <td>Friends</td>
-                <td>Kisah persahabatan dan kehidupan sehari-hari enam teman di New York City.</td>
-                <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                <td>2015-05-06</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
 
 <!-- Fitur Search -->
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width: 90%;">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #000000; color: #ED151E;">
+            <div class="modal-header" style="color: #ED151E;">
                 <h5 class="modal-title" id="searchModalLabel">HASIL PENCARIAN</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <table class="film-table">
                     <thead>
                         <tr>
                             <th>Judul</th>
-                            <th>Sinopsis</th>
+                            <th>Sinopsis Trailer</th>
                             <th>URL Trailer</th>
-                            <th>Tanggal Rilis</th>
+                            <th>Tanggal Rilis Trailer</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="modal-text">Fallout</td>
-                            <td class="modal-text">Di masa depan, Los Angeles pasca-apokaliptik yang disebabkan oleh destruksi nuklir, warga harus tinggal di bunker bawah tanah untuk melindungi diri dari radiasi, mutan, dan perampok.</td>
-                            <td><button type="button" class="btn btn-primary">Lihat Trailer</button></td>
-                            <td class="modal-text">10-11-2024</td>
-                        </tr>
-                        <!-- Tambahkan baris untuk hasil pencarian lainnya di sini jika ada -->
+                    <tbody id="searchResults">
                     </tbody>
                 </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -252,8 +218,55 @@
 
 <script>
     document.getElementById('searchButton').addEventListener('click', function () {
+        var query = document.getElementById('searchInput').value;
         console.log("Search button clicked!");
-        $('#searchModal').modal('show');
+
+        // Encode the query to make it URL-safe
+        var encodedQuery = encodeURIComponent(query);
+
+        // Construct the URL with the encoded query
+        const url = '/tayangan/search_tayangan/?q=' + encodedQuery;
+
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var results = data.results;
+                var resultsTable = document.getElementById('searchResults');
+                resultsTable.innerHTML = '';
+
+                results.forEach(result => {
+                    var row = `
+                <tr>
+                    <td>${result.judul}</td>
+                    <td>${result.sinopsis_trailer}</td>
+                    <td>${result.url_video_trailer}</td>
+                    <td>${result.release_date_trailer}</td>
+                </tr>`;
+                    resultsTable.innerHTML += row;
+                });
+
+                var searchModal = new bootstrap.Modal(document.getElementById('searchModal'), {
+                    keyboard: false
+                });
+                searchModal.show();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+    // Mencegah tombol pencarian diklik jika input kosong
+    document.getElementById('searchInput').addEventListener('input', function () {
+        var query = this.value.trim();
+        var searchButton = document.getElementById('searchButton');
+
+        // Jika input kosong, nonaktifkan tombol pencarian
+        if (query === '') {
+            searchButton.disabled = true;
+        } else {
+            searchButton.disabled = false;
+        }
     });
 </script>
 {% endblock content %}

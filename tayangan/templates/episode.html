@@ -107,71 +107,146 @@
         border-color: #ba0d14;
     }
 
+    .btn-episode.disabled {
+        background-color: #7a7a7a; /* Warna latar belakang untuk tombol yang dinonaktifkan */
+        border-color: #7a7a7a;
+        cursor: not-allowed;
+        pointer-events: none; /* Mencegah interaksi pengguna pada tombol yang dinonaktifkan */
+    }
+
+    .btn-episode.disabled:hover {
+        background-color: #7a7a7a; /* Pastikan efek hover tidak mengubah warna */
+        border-color: #7a7a7a;
+    }
+
+    /* Gaya untuk slider dan teks progres */
+    .slider-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 20px;
+        color: #f2f2f2;
+    }
+
+    .slider-wrapper {
+        width: 100%;
+        max-width: 600px;
+    }
+
+    #progress-slider {
+        width: 100%;
+        margin-right: 10px;
+    }
+
+    #progress-value {
+        min-width: 50px;
+        text-align: left;
+    }
+
+    #watchButton {
+        margin-left: 20px;
+    }
+
 </style>
 
-<div class="container mt-5">
-    <h1>HALAMAN EPISODE</h1>
+<body>
+    <div class="container mt-5">
+        <h1>HALAMAN EPISODE</h1>
+    
+        <!-- Judul Series -->
+        <h2>{{ episode.judul_tayangan }}</h2>
+        <h2>{{ episode.sub_judul }}</h2>
+    
+        <!-- Progress slider -->
+        <div class="slider-container">
+            <div class="slider-wrapper">
+                <label for="progress-slider">Progres Menonton:</label>
+                <input type="range" id="progress-slider" name="progress-slider" min="0" max="{{ episode.durasi_series }}" value="0" oninput="updateSliderValue(this.value, '{{ episode.durasi_series }}')">
+                <span id="progress-value">0%</span>
+            </div>
+            <button type="button" class="btn btn-episode" id="watchButton" onclick="watchShow('{{ episode.id_tayangan }}', document.getElementById('progress-slider').value);">Tonton</button>
+        </div>
+    
+        <!-- Kumpulan Episode -->
+        <h3>EPISODE LAINNYA</h3>
+        <div class="episode-container">
+            {% for eps in episode.kumpulan_episode %}
+                <div class="episode-item">
+                    {% if eps.sub_judul == episode.sub_judul %}
+                        <span class="btn btn-episode disabled">{{ eps.sub_judul }}</span>
+                    {% else %}
+                        <a href="{% url 'tayangan:episode_select' episode.id_tayangan eps.sub_judul %}" class="btn btn-episode">{{ eps.sub_judul }}</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    
+        <!-- Tombol-->
+        <div class="mb-3 d-flex justify-content-center">
+            <button type="button" class="btn btn-primary me-2">Unduh Tayangan</button>
+            <button type="button" class="btn btn-primary">Jadikan Favorit</button>
+        </div>
+    
+        <div class="div-table">
+            <!-- Tabel Data Series -->
+            <table class="film-table">
+                <tbody>
+                    <tr>
+                        <th>Sinopsis Episode</th>
+                        <td>{{ episode.sinopsis_episode }}</td>
+                    </tr>
+                    <tr>
+                        <th>Durasi Episode</th>
+                        <td>{{ episode.durasi_episode }}</td>
+                    </tr>
+                    <tr>
+                        <th>URL Episode</th>
+                        <td>{{ episode.url_episode }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tanggal Rilis Episode</th>
+                        <td>{{ episode.tanggal_rilis_episode }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
 
-    <!-- Judul Series -->
-    <h2>Fallout</h2>
-    <h2>The Beginning</h2>
+<script>
+    function updateSliderValue(value, duration) {
+        var progressValue = document.getElementById("progress-value");
+        var percentage = (value / duration) * 100;
+        progressValue.textContent = percentage.toFixed(2) + "%";
+    }
 
-    <!-- Kumpulan Episode -->
-    <h3>EPISODE LAINNYA</h3>
-    <div class="episode-container">
-        <div class="episode-item">
-            <button type="button" class="btn btn-episode">Episode 1</button>
-        </div>
-        <div class="episode-item">
-            <button type="button" class="btn btn-episode">Episode 2</button>
-        </div>
-        <div class="episode-item">
-            <button type="button" class="btn btn-episode">Episode 3</button>
-        </div>
-        <div class="episode-item">
-            <button type="button" class="btn btn-episode">Episode 4</button>
-        </div>
-        <div class="episode-item">
-            <button type="button" class="btn btn-episode">Episode 5</button>
-        </div>
-        <div class="episode-item">
-            <button type="button" class="btn btn-episode">Episode 6</button>
-        </div>
-        <div class="episode-item">
-            <button type="button" class="btn btn-episode">Episode 7</button>
-        </div>
-        <div class="episode-item">
-            <button type="button" class="btn btn-episode">Episode 8</button>
-        </div>
-    </div>
+    function watchShow(idTayangan, durasiTonton) {
+        const url = "{% url 'tayangan:tonton' episode.id_tayangan %}";
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: JSON.stringify({
+                id_tayangan: idTayangan,
+                durasi_tonton: durasiTonton
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                console.log("Tonton berhasil disimpan ke riwayat.");
+                location.reload();
+            } else {
+                console.error("Gagal menyimpan tonton ke riwayat.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    }
+</script>
 
-    <!-- Tombol-->
-    <div class="mb-3 d-flex justify-content-center">
-        <button type="button" class="btn btn-primary me-2">Unduh Tayangan</button>
-        <button type="button" class="btn btn-primary">Jadikan Favorit</button>
-    </div>
 
-    <div class="div-table">
-        <!-- Tabel Data Series -->
-        <table class="film-table">
-            <tbody>
-                <tr>
-                    <th>Sinopsis Episode</th>
-                    <td>Perang...</td>
-                </tr>
-                <tr>
-                    <th>Durasi Episode</th>
-                    <td>62 Menit</td>
-                </tr>
-                <tr>
-                    <th>URL Episode</th>
-                    <td><button type="button" class="btn btn-primary">Lihat Episode</button></td>
-                </tr>
-                <tr>
-                    <th>Tanggal Rilis Episode</th>
-                    <td>10-11-2024</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 {% endblock content %}
